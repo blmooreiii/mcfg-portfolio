@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marble Ceilings For Good</title>
+<link rel="stylesheet" href="https://use.typekit.net/olk5una.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --plum: #4A1942; --plum-deep: #2E0F29; --plum-mid: #6B2B61;
+  --accent: #1E95B2; --accent-light: #48ADC4; --accent-pale: #D6E8F0;
+  --cream: #FAF7F2; --sand: #F0EBE1; --ink: #140E12;
+  --mid: #4A3F45; --light-border: rgba(74,25,66,0.12); --accent-border: rgba(30,149,178,0.25);
+  --font-headline: "freightdispcmp-pro", serif;
+  --font-body: "sirenne-eighteen-mvb", serif;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--cream); color: var(--ink); font-family: var(--font-body); font-weight: 400; overflow-x: hidden; }
+
+/* ════════════════════════════════
+   INTRO ANIMATION SCREEN
+════════════════════════════════ */
+#intro {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0B0609;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#intro.done { pointer-events: none; }
+
+/* Vignette overlay */
+#intro::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none; z-index: 2;
+}
+
+/* Canvas sits behind text */
+#root-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Light shaft overlay — renders above canvas, below text */
+.light-shaft {
+  position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 70%;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none; z-index: 3;
+}
+.light-shaft-2 {
+  position: absolute; top: -5%; left: 38%; width: 200px; height: 50%;
+  background: radial-gradient(ellipse 40% 100% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none; z-index: 3;
+}
+.light-shaft-3 {
+  position: absolute; top: -5%; left: 58%; width: 150px; height: 45%;
+  background: radial-gradient(ellipse 40% 100% at 50% 0%, rgba(240,220,160,0.08) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none; z-index: 3;
+}
+
+/* Intro Quote */
+#intro-quote {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 40px; opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+.quote-text {
+  font-family: var(--font-headline); font-size: clamp(18px, 2.8vw, 26px);
+  color: var(--accent-pale); text-align: center; margin-bottom: 24px;
+  max-width: 90%; line-height: 1.35; white-space: nowrap;
+}
+.quote-author {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); width: 100%; max-width: 840px;
+  text-align: right; margin-top: 12px;
+}
+
+/* Intro text */
+.intro-text {
+  position: relative; z-index: 4;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.intro-text .intro-eyebrow {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+  color: #C7C7C7; margin-bottom: 18px;
+  display: block;
+}
+.intro-text .intro-name {
+  font-family: var(--font-headline); font-weight: 700;
+  font-size: clamp(28px, 5vw, 52px);
+  color: var(--cream); letter-spacing: 0.04em;
+  display: block; line-height: 1.2;
+}
+.intro-text .intro-name em {
+  font-style: italic; color: var(--accent-light);
+}
+
+/* Intro exit — wipe upward */
+#intro.exiting {
+  animation: introExit 1s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes introExit {
+  0%   { clip-path: inset(0 0 0 0); opacity: 1; }
+  100% { clip-path: inset(0 0 100% 0); opacity: 1; }
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  width: 100%; max-width: 1264px; margin: 0 auto; z-index: 1001; /* Elevated above overlay */
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 56px;
+  background: rgba(250,247,242,0.94);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--light-border);
+  opacity: 0; transition: opacity 0.6s 0.2s, transform 0.6s 0.2s;
+}
+nav.visible { opacity: 1; }
+.nav-logo { display: flex; align-items: center; gap: 18px; }
+.nav-logo-mark {
+  width: 44px; height: 44px; background: var(--plum);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-mark span { font-family: var(--font-headline); font-weight: 700; font-size: 24px; color: var(--accent); font-style: italic; }
+.nav-wordmark { font-family: var(--font-headline); font-weight: 700; font-size: 19px; letter-spacing: 0.04em; color: var(--plum); }
+.nav-links { display: flex; gap: 48px; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--plum); }
+.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; padding: 11px 26px; background: var(--plum); color: var(--cream); text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.nav-cta:hover { background: var(--plum-deep); transform: translateY(-1px); }
+
+/* Nav Toggle (Mobile) */
+.nav-toggle {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  width: 24px; height: 18px;
+  position: relative; z-index: 1001;
+}
+.nav-toggle span {
+  display: block; width: 100%; height: 2px;
+  background: var(--plum);
+  position: absolute; left: 0;
+  transition: transform 0.3s, top 0.3s, opacity 0.3s;
+}
+.nav-toggle span:first-child { top: 0; }
+.nav-toggle span:last-child { top: 16px; }
+.nav-toggle.active span:first-child { top: 8px; transform: rotate(45deg); }
+.nav-toggle.active span:last-child { top: 8px; transform: rotate(-45deg); }
+
+/* ════════════════════════════════
+   MAIN SITE (hidden until intro done)
+════════════════════════════════ */
+#site { opacity: 0; transition: opacity 0.8s; max-width: 1264px; margin: 0 auto; background: var(--cream); position: relative; overflow-x: clip; }
+#site.visible { opacity: 1; }
+
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+.hero {
+  min-height: 100vh; position: relative; overflow: hidden; padding-top: 76px;
+  background: linear-gradient(90deg, var(--cream) 55%, var(--plum) 55%);
+}
+.hero::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 45%; bottom: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px; pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 2; min-height: calc(100vh - 76px); display: flex; flex-direction: column; }
+.hero-meta-row { display: flex; justify-content: space-between; align-items: center; padding: 28px 56px 0; }
+.hero-meta-left { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 16px; }
+.hero-meta-left::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+.hero-meta-right { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+.hero-tagline-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 48px 56px 0; }
+.hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 14px; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
+.hero-h1 { font-family: var(--font-headline); font-weight: 700; font-size: clamp(52px, 7.5vw, 108px); line-height: 0.93; letter-spacing: -0.02em; margin-bottom: 0; }
+.hero-h1 .h1-dark { color: var(--ink); display: block; }
+.hero-h1 .h1-gold { color: var(--accent-light); display: block; font-style: italic; }
+.hero-bottom { padding: 48px 56px 64px; display: grid; grid-template-columns: 55fr 45fr; gap: 0; }
+.hero-bottom-left { padding-right: 0; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--light-border); }
+.hero-mission { font-size: 22px; font-weight: 300; line-height: 1.75; color: var(--mid); margin-bottom: 36px; max-width: 480px; }
+.hero-mission strong { font-weight: 500; color: var(--plum); }
+.hero-actions { display: flex; gap: 20px; align-items: center; }
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 15px 32px; background: var(--plum); color: var(--cream); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; }
+.btn-primary:hover { background: var(--plum-deep); transform: translateY(-2px); }
+.btn-primary .arrow { transition: transform 0.2s; }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-text { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); text-decoration: none; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; }
+.btn-text:hover { color: var(--plum); border-color: var(--plum); }
+.hero-bottom-right { padding-left: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+
+/* Mosaic grid — 4 squares like Concept 1 */
+.hero-mosaic {
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  gap: 0; flex: 1; margin: 0 -56px 0 0;
+  min-height: 320px;
+}
+.mosaic-cell {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.3s;
+}
+.mosaic-cell:nth-child(1) { background: rgba(201,168,76,0.14); }
+.mosaic-cell:nth-child(2) { background: rgba(255,255,255,0.04); }
+.mosaic-cell:nth-child(3) { background: rgba(255,255,255,0.07); }
+.mosaic-cell:nth-child(4) { background: rgba(201,168,76,0.07); }
+.mosaic-cell-inner {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 60%, rgba(74,25,66,0.35));
+}
+/* Stat anchored in cell 1 */
+.mosaic-stat {
+  position: absolute; bottom: 32px; left: 32px; right: 32px;
+}
+.mosaic-stat-num {
+  font-family: var(--font-headline); font-weight: 700;
+  font-size: 48px; font-weight: 400; line-height: 1;
+  color: var(--accent-light); display: block;
+}
+.mosaic-stat-label {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.65); margin-top: 8px; display: block; line-height: 1.4;
+}
+/* Grid lines texture inside cells */
+.mosaic-cell::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+/* Project list in cell 4 */
+.mosaic-projects {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 20px 28px;
+  gap: 0;
+}
+.mosaic-project-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer; transition: padding-left 0.2s;
+  flex-shrink: 0;
+}
+.mosaic-project-item:last-child { padding-bottom: 0; border-bottom: none; }
+.mosaic-project-item:first-child { border-top: none; }
+.mosaic-project-item:hover { padding-left: 4px; }
+.mosaic-project-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); line-height: 1.3; }
+.mosaic-project-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(201,168,76,0.8); flex-shrink: 0; margin-left: 8px; }
+
+/* ════════════════════════════════
+   MISSION STRIP
+════════════════════════════════ */
+.mission-strip { display: grid; grid-template-columns: 1fr 2px 1fr; background: var(--plum); padding: 72px 56px; align-items: center; }
+.mission-divider { background: rgba(255,255,255,0.1); height: 100%; }
+.mission-left { padding-right: 64px; }
+.mission-right { padding-left: 64px; }
+.mission-kicker { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.mission-kicker::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+.mission-quote { font-family: var(--font-headline); font-weight: 700; font-size: clamp(22px, 2.5vw, 34px); font-weight: 400; color: var(--cream); line-height: 1.35; }
+.mission-quote em { font-style: italic; color: var(--accent-light); }
+.mission-body { font-size: 19px; line-height: 1.9; color: rgba(255,255,255,0.55); font-weight: 300; }
+
+/* ════════════════════════════════
+   PILLARS
+════════════════════════════════ */
+.pillars { padding: 100px 56px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+.section-heading { font-family: var(--font-headline); font-weight: 700; font-size: clamp(34px, 4vw, 52px); font-weight: 400; color: var(--plum); line-height: 1.15; margin-bottom: 64px; max-width: 560px; }
+.pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--light-border); }
+.pillar { padding: 52px 44px; border-right: 1px solid var(--light-border); position: relative; overflow: hidden; transition: background 0.3s; }
+.pillar:last-child { border-right: none; }
+.pillar:hover { background: white; }
+.pillar-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+.pillar:hover .pillar-accent { transform: scaleX(1); }
+.pillar-num { font-family: var(--font-headline); font-weight: 700; font-size: 13px; font-style: italic; color: var(--accent); margin-bottom: 20px; display: block; }
+.pillar-title { font-size: 17px; font-weight: 500; color: var(--plum); margin-bottom: 16px; }
+.pillar-body { font-size: 18px; line-height: 1.85; color: var(--mid); font-weight: 300; }
+
+/* ════════════════════════════════
+   PROJECTS
+════════════════════════════════ */
+.projects { padding: 0 56px 100px; }
+.projects-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--light-border); padding-bottom: 20px; margin-bottom: 0; }
+.projects-count { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); }
+.project-row { display: grid; grid-template-columns: 48px 1fr auto auto; align-items: center; gap: 40px; padding: 36px 0; border-bottom: 1px solid var(--light-border); cursor: pointer; position: relative; transition: padding-left 0.25s; }
+.project-row::before { content: ''; position: absolute; left: -56px; right: -56px; top: 0; bottom: 0; background: var(--sand); opacity: 0; transition: opacity 0.2s; z-index: -1; }
+.project-row:hover { padding-left: 12px; }
+.project-row:hover::before { opacity: 1; }
+.p-num { font-family: var(--font-headline); font-weight: 700; font-style: italic; font-size: 16px; color: var(--accent-border); transition: color 0.2s; }
+.project-row:hover .p-num { color: var(--accent); }
+.p-name { font-family: var(--font-headline); font-weight: 700; font-size: 28px; font-weight: 400; color: var(--plum); margin-bottom: 4px; }
+.p-desc { font-size: 17px; color: var(--mid); line-height: 1.6; font-weight: 300; max-width: 520px; }
+.p-type { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); white-space: nowrap; }
+.p-status { text-align: right; white-space: nowrap; }
+.status-pill { display: inline-block; padding: 6px 16px; border-radius: 40px; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid; }
+.s-live { border-color: rgba(201,168,76,0.4); color: var(--accent); background: rgba(201,168,76,0.06); }
+.s-build { border-color: var(--light-border); color: var(--mid); }
+.s-disc { border-color: var(--light-border); color: rgba(122,107,115,0.5); }
+
+/* ════════════════════════════════
+   IMPACT NUMBERS
+════════════════════════════════ */
+.impact { background: var(--sand); padding: 80px 56px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); }
+.impact-cell { padding: 36px 32px; border-right: 1px solid var(--light-border); text-align: center; }
+.impact-cell:last-child { border-right: none; }
+.impact-num { font-family: var(--font-headline); font-weight: 700; font-size: 52px; color: var(--plum); line-height: 1; margin-bottom: 10px; }
+.impact-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); }
+
+/* ════════════════════════════════
+   BOARD PAGE
+════════════════════════════════ */
+.board-page { padding: 100px 56px; }
+.board-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 80px; }
+.board-intro-right p { font-size: 19px; line-height: 1.9; color: var(--mid); font-weight: 300; }
+
+.board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.board-card {
+  background: white; padding: 0;
+  border: 1px solid var(--light-border);
+  overflow: hidden; position: relative;
+  transition: box-shadow 0.3s;
+}
+.board-card:hover { box-shadow: 0 8px 40px rgba(74,25,66,0.10); }
+
+/* Monogram portrait area */
+.board-portrait {
+  height: 220px; background: var(--plum);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.board-portrait::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.board-portrait-alt { background: var(--plum-deep); }
+.board-portrait-alt2 { background: var(--plum-mid); }
+.board-monogram {
+  font-family: var(--font-headline); font-weight: 700;
+  font-size: 88px; font-style: italic;
+  color: rgba(201,168,76,0.25);
+  line-height: 1; position: relative; z-index: 1;
+  user-select: none;
+}
+.board-role-badge {
+  position: absolute; bottom: 16px; left: 16px; right: 16px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  padding: 8px 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.board-role-text { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.board-role-org { font-size: 10px; font-weight: 400; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); }
+
+.board-body { padding: 32px; }
+.board-name { font-family: var(--font-headline); font-weight: 700; font-size: 22px; font-weight: 400; color: var(--plum); margin-bottom: 4px; line-height: 1.2; }
+.board-title { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+.board-bio { font-size: 17px; line-height: 1.85; color: var(--mid); font-weight: 300; }
+
+/* Founder card — spans full width differently */
+.board-card.founder { grid-column: 1 / -1; }
+.board-card.founder .board-portrait { height: 180px; background: var(--accent); }
+.board-card.founder .board-portrait::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(74,25,66,0.5), rgba(201,168,76,0.08));
+}
+.board-card.founder .board-layout { display: grid; grid-template-columns: 280px 1fr; }
+.board-card.founder .board-portrait { height: 100%; min-height: 280px; }
+.board-card.founder .board-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+.board-card.founder .board-name { font-size: 32px; margin-bottom: 6px; }
+.board-card.founder .board-bio { font-size: 18px; max-width: 640px; }
+  
+  /* Contributors Section */
+  .contributors-section { margin-top: 120px; border-top: 1px solid var(--light-border); padding-top: 80px; }
+  .contributors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .contributor-card { background: white; border: 1px solid var(--light-border); display: flex; align-items: center; padding: 24px; transition: transform 0.3s; }
+  .contributor-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(74,25,66,0.08); }
+  .contributor-portrait { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin-right: 24px; flex-shrink: 0; background: var(--sand); border: 2px solid var(--accent-light); }
+  .contributor-portrait img { width: 100%; height: 100%; object-fit: cover; }
+  .contributor-info { flex: 1; }
+  .contributor-name { font-family: var(--font-headline); font-weight: 700; font-size: 18px; color: var(--plum); margin-bottom: 2px; }
+  .contributor-title { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+
+/* ════════════════════════════════
+   CTA BAND
+════════════════════════════════ */
+.cta-band { background: var(--plum); display: grid; grid-template-columns: 1fr 1px 1fr; min-height: 360px; }
+.cta-col { padding: 72px 64px; display: flex; flex-direction: column; justify-content: space-between; }
+.cta-divider-line { background: rgba(255,255,255,0.1); }
+.cta-col h3 { font-family: var(--font-headline); font-weight: 700; font-size: clamp(26px, 3vw, 38px); font-weight: 400; color: var(--cream); line-height: 1.2; margin-bottom: 16px; }
+.cta-col h3 em { font-style: italic; color: var(--accent-light); }
+.cta-col p { font-size: 18px; line-height: 1.9; color: rgba(255,255,255,0.5); font-weight: 300; margin-bottom: 40px; }
+.btn-gold { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 16px 32px; background: var(--accent); color: var(--plum-deep); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.btn-gold:hover { background: var(--accent-light); transform: translateY(-2px); }
+.btn-outline-cream { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 16px 32px; border: 1px solid rgba(255,255,255,0.25); color: var(--cream); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+.btn-outline-cream:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+footer { background: var(--plum-deep); padding: 56px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(201,168,76,0.15); }
+.footer-brand { font-family: var(--font-headline); font-weight: 700; font-size: 20px; letter-spacing: 0.05em; color: var(--cream); margin-bottom: 10px; }
+.footer-sub { font-size: 11px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; }
+.footer-right { font-size: 11px; color: rgba(255,255,255,0.3); text-align: right; line-height: 1.8; }
+.footer-gold-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); vertical-align: middle; margin: 0 8px; opacity: 0.5; }
+
+/* ════════════════════════════════
+   SCROLL REVEAL
+════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; }
+
+/* ════════════════════════════════
+   ABOUT PAGE
+   ════════════════════════════════ */
+.about-page { padding: 140px 56px 120px; max-width: 1000px; margin: 0 auto; }
+.about-header { text-align: center; margin-bottom: 100px; }
+.about-header h2 { font-family: var(--font-headline); font-weight: 700; font-size: clamp(32px, 5vw, 64px); color: var(--plum); line-height: 1.1; margin-bottom: 28px; }
+.about-header .eyebrow { font-size: 14px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 24px; }
+
+.about-section { margin-bottom: 120px; }
+.about-section h3 { font-family: var(--font-headline); font-weight: 700; font-size: 36px; color: var(--plum); margin-bottom: 40px; border-bottom: 1px solid var(--light-border); padding-bottom: 16px; display: inline-block; position: relative; }
+.about-section h3::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.8s cubic-bezier(0.76, 0, 0.24, 1); transition-delay: 0.3s; }
+.about-section.in h3::after { width: 100%; }
+
+.about-content { font-size: 22px; line-height: 1.95; color: var(--mid); font-weight: 300; }
+.about-content p { margin-bottom: 28px; opacity: 0; transform: translateY(15px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.about-section.in .about-content p { opacity: 1; transform: translateY(0); }
+.about-section.in .about-content p:nth-child(1) { transition-delay: 0.1s; }
+.about-section.in .about-content p:nth-child(2) { transition-delay: 0.25s; }
+.about-section.in .about-content p:nth-child(3) { transition-delay: 0.4s; }
+.about-section.in .about-content p:nth-child(4) { transition-delay: 0.55s; }
+
+.about-lead { font-size: 26px; line-height: 1.6; color: var(--plum); margin-bottom: 48px !important; font-family: var(--font-headline); font-weight: 700; font-style: italic; border-left: 3px solid transparent; padding-left: 32px; transition: border-color 0.8s ease 0.4s; }
+.about-section.in .about-lead { border-color: var(--accent); }
+
+.ecosystem-grid { display: grid; grid-template-columns: 1fr; gap: 24px; background: var(--light-border); border: 1px solid var(--light-border); margin-top: 48px; overflow: hidden; }
+.ecosystem-card { padding: 48px; background: white; transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1), background 0.4s; opacity: 0; transform: translateY(30px) scale(0.98); position: relative; }
+.about-section.in .ecosystem-card { opacity: 1; transform: translateY(0) scale(1); }
+.about-section.in .ecosystem-card:nth-child(1) { transition-delay: 0.5s; }
+.about-section.in .ecosystem-card:nth-child(2) { transition-delay: 0.65s; }
+.about-section.in .ecosystem-card:nth-child(3) { transition-delay: 0.8s; }
+
+.ecosystem-card:hover { transform: translateY(-8px) scale(1.01) !important; background: var(--cream); z-index: 2; box-shadow: 0 20px 40px rgba(74,25,66,0.06); }
+.ecosystem-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--accent); transition: width 0.4s ease; }
+.ecosystem-card:hover::after { width: 100%; }
+.ecosystem-card h4 { font-family: var(--font-headline); font-weight: 700; font-size: 26px; color: var(--plum); margin-bottom: 16px; }
+.ecosystem-card p { font-size: 19px; line-height: 1.8; color: var(--mid); margin-bottom: 0; }
+
+.about-quote-block { background: var(--plum); color: var(--cream); padding: 100px 72px; text-align: center; position: relative; overflow: hidden; border-radius: 4px; }
+.about-quote-block::before {
+  content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: skewX(-25deg); transition: none; z-index: 1; pointer-events: none;
+}
+.about-quote-block:hover::before {
+  left: 150%; transition: left 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.about-quote-block::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 70% 20%, rgba(201,168,76,0.1) 0%, transparent 60%); }
+.about-quote-text { font-family: var(--font-headline); font-weight: 700; font-size: clamp(28px, 4.5vw, 42px); line-height: 1.25; margin-bottom: 40px; position: relative; z-index: 1; }
+.about-quote-sub { font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-light); position: relative; z-index: 1; opacity: 0.8; }
+
+
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+.nav-links a { position: relative; }
+.nav-links a.active { color: var(--plum) !important; font-weight: 600; }
+.nav-links a.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+
+/* RESPONSIVE OVERRIDES (Early Stacking for Fluidity) */
+@media (max-width: 1024px) {
+  nav { padding: 18px 24px; left: 0; transform: none; width: 100%; max-width: none; }
+  .nav-links {
+    position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
+    display: flex; flex-direction: column; align-items: flex-start; 
+    justify-content: flex-start; padding: 120px 40px;
+    gap: 32px; z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+  }
+  .nav-links::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(250, 247, 242, 0.9); /* Slightly more opaque glass */
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    z-index: -1; border-left: 1px solid rgba(255,255,255,0.3);
+  }
+  .nav-links.active { transform: translateX(0); }
+  .nav-overlay {
+    position: fixed; inset: 0; background: rgba(11, 6, 9, 0.45);
+    z-index: 999; /* Below nav container (1001) */
+    opacity: 0; pointer-events: none; transition: opacity 0.4s;
+  }
+  .nav-overlay.active { opacity: 1; pointer-events: auto; }
+  .nav-links a { 
+    position: relative; z-index: 2; /* Ensure links are above pseudo-glass */
+    font-size: 24px; color: var(--plum); font-weight: 600; 
+    width: 100%; border-bottom: 1px solid rgba(97,64,81,0.08); padding-bottom: 12px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5); /* Pop text forward */
+  }
+  .nav-links a.active::after { bottom: 8px; }
+  .nav-cta { display: none !important; }
+  .nav-toggle { display: block !important; }
+
+  .hero { background: var(--cream) !important; }
+  .hero::after { display: none !important; }
+  .hero-bottom { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .hero-bottom-left { border-right: none !important; padding: 48px 24px 64px !important; }
+  .hero-bottom-right { background: var(--plum) !important; padding: 64px 24px !important; border-top: 1px solid rgba(255,255,255,0.1) !important; }
+  .hero-mosaic { min-height: 500px !important; display: flex !important; flex-direction: column !important; gap: 12px !important; margin: 0 !important; }
+  .mosaic-cell { position: relative !important; min-height: 160px !important; border-radius: 4px !important; overflow: visible !important; }
+  .mosaic-stat-num { font-size: 42px !important; }
+  .mosaic-stat-label { color: rgba(255,255,255,0.9) !important; font-size: 11px !important; }
+  .mosaic-project-name { color: rgba(255,255,255,0.9) !important; }
+  .hero-h1 { font-size: clamp(38px, 9vw, 52px) !important; }
+
+  .mission-strip { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+  .mission-divider { height: 1px; width: 100%; }
+  .mission-left, .mission-right { padding: 0; }
+
+  .pillars-grid { grid-template-columns: 1fr !important; border-right: none; border-top: 1px solid var(--light-border); }
+  .pillar { border-right: none !important; border-bottom: 1px solid var(--light-border); padding: 40px 24px; }
+  .pillar:last-child { border-bottom: none; }
+
+  .impact { grid-template-columns: 1fr !important; gap: 0; }
+  .impact-cell { border-right: none !important; border-bottom: 1px solid var(--light-border); padding: 48px 24px; text-align: center; }
+  .impact-cell:last-child { border-bottom: none; }
+
+  .project-row { grid-template-columns: 1fr !important; gap: 16px; padding: 32px 0; }
+  .project-row::before { left: -24px; right: -24px; }
+  .p-type { display: none; }
+  .p-status { text-align: left; }
+
+  .board-intro { grid-template-columns: 1fr; gap: 32px; }
+  .board-grid { grid-template-columns: 1fr !important; }
+  .board-card.founder .board-layout { grid-template-columns: 1fr !important; }
+  .board-card.founder .board-portrait { height: 320px; }
+  .board-card.founder .board-body { padding: 32px 24px; }
+
+  .cta-band { grid-template-columns: 1fr; }
+  .cta-divider-line { height: 1px; width: 100%; }
+  .cta-col { padding: 48px 24px; }
+  
+  .ecosystem-grid { grid-template-columns: 1fr !important; }
+  .about-page { padding: 120px 24px 80px; }
+  .about-header h2 { font-size: 32px !important; }
+  .about-header .eyebrow { font-size: 12px; }
+  .about-lead { padding-left: 20px; font-size: 20px; }
+  .about-quote-block { padding: 60px 24px; }
+  .about-quote-text { font-size: 24px !important; }
+
+  .contributors-grid { grid-template-columns: 1fr !important; gap: 12px; }
+  .contributor-card { padding: 20px; }
+
+  footer { flex-direction: column; align-items: flex-start; gap: 40px; padding: 48px 24px; }
+  .footer-right { text-align: left; }
+}
+
+@media (max-width: 480px) {
+  .hero-meta-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .hero-meta-right { color: var(--mid); }
+  .hero-tagline-wrap { padding-top: 24px; }
+  .hero-h1 { font-size: 34px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     INTRO ANIMATION
+══════════════════════════════ -->
+<div id="intro">
+  <canvas id="root-canvas"></canvas>
+  <div class="light-shaft" id="ls1"></div>
+  <div class="light-shaft-2" id="ls2"></div>
+  <div class="light-shaft-3" id="ls3"></div>
+  <div class="intro-quote" id="intro-quote">
+    <div class="quote-text">"When the 'I' becomes 'We', even the illness becomes wellness"</div>
+    <div class="quote-author">— Malcolm X</div>
+  </div>
+  <div class="intro-text" id="intro-text">
+    <span class="intro-eyebrow">Rooted in community. Built for the future.</span>
+    <span class="intro-name">Marble Ceilings <em>For Good</em></span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SITE
+══════════════════════════════ -->
+<div class="nav-overlay" id="nav-overlay" onclick="toggleMobileMenu()"></div>
+<nav id="main-nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark"><span>M</span></div>
+    <span class="nav-wordmark">Marble Ceilings For Good</span>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#" onclick="showPage('home',this);toggleMobileMenu()">Our Work</a></li>
+    <li><a href="#" onclick="showPage('about',this);toggleMobileMenu()">About</a></li>
+    <li><a href="#" onclick="showPage('board',this);toggleMobileMenu()">Board</a></li>
+    <li><a href="#" onclick="showPage('home','#page-home-anchor');toggleMobileMenu()">Impact</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Support Us</a>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<div id="site">
+
+  <div id="page-home-anchor"></div>
+
+  <!-- ══ HOME PAGE ══ -->
+  <div id="page-home" class="page-section active">
+    <!-- Anchor for nav -->
+    <div id="page-home-anchor"></div>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-meta-row">
+          <span class="hero-meta-left">Community Innovation Lab &nbsp;·&nbsp; Berkeley County, SC</span>
+          <span class="hero-meta-right">Est. 2026 &nbsp;·&nbsp; 501(c)(3) Pending</span>
+        </div>
+        <div class="hero-tagline-wrap">
+          <div class="hero-eyebrow">Nonprofit Technology for the Lowcountry</div>
+          <h1 class="hero-h1">
+            <span class="h1-dark">Technology</span>
+            <span class="h1-dark">that moves</span>
+            <span class="h1-gold">people forward.</span>
+          </h1>
+        </div>
+        <div class="hero-bottom">
+          <div class="hero-bottom-left">
+            <p class="hero-mission">We build tools <strong>with and for communities</strong> that the world has overlooked — starting in South Carolina, with plans to grow everywhere it's needed.</p>
+            <div class="hero-actions">
+              <a href="#" class="btn-primary">See Our Work <span class="arrow">→</span></a>
+              <a href="#" class="btn-text">Our Story</a>
+            </div>
+          </div>
+          <div class="hero-bottom-right">
+            <div class="hero-mosaic">
+
+              <!-- Cell 1: stat -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-stat">
+                  <span class="mosaic-stat-num">1 in 4</span>
+                  <span class="mosaic-stat-label">Women experience<br>domestic violence</span>
+                </div>
+              </div>
+
+              <!-- Cell 2: food insecurity stat -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-stat">
+                  <span class="mosaic-stat-num">14.4%</span>
+                  <span class="mosaic-stat-label">SC households face<br>food insecurity</span>
+                </div>
+              </div>
+
+              <!-- Cell 3: women's safety stat -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-stat">
+                  <span class="mosaic-stat-num">#43</span>
+                  <span class="mosaic-stat-label">SC ranks 43rd in U.S.<br>for women's safety</span>
+                </div>
+              </div>
+
+              <!-- Cell 4: project list -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-projects">
+                  <div class="mosaic-project-item">
+                    <span class="mosaic-project-name">Bastet</span>
+                    <span class="mosaic-project-tag">Live</span>
+                  </div>
+                  <div class="mosaic-project-item">
+                    <span class="mosaic-project-name">Seshat</span>
+                    <span class="mosaic-project-tag">Building</span>
+                  </div>
+                  <div class="mosaic-project-item">
+                    <span class="mosaic-project-name">Project Malcolm</span>
+                    <span class="mosaic-project-tag">Discovery</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSION STRIP -->
+    <section class="mission-strip">
+      <div class="mission-left reveal">
+        <div class="mission-kicker">Why We Exist</div>
+        <p class="mission-quote">"Innovation shouldn't be a <em>zip code privilege.</em>"</p>
+      </div>
+      <div class="mission-divider"></div>
+      <div class="mission-right reveal d2">
+        <p class="mission-body">Marble Ceilings For Good is a South Carolina nonprofit proving that the most important technology of this decade doesn't have to start in Silicon Valley. We build apps, platforms, and research tools that close the gap between communities and the systems meant to serve them.</p>
+      </div>
+    </section>
+
+    <!-- PILLARS -->
+    <section class="pillars">
+      <div class="section-eyebrow reveal">What We Do</div>
+      <h2 class="section-heading reveal d1">Built around three commitments.</h2>
+      <div class="pillars-grid">
+        <div class="pillar reveal">
+          <div class="pillar-accent"></div>
+          <span class="pillar-num">i.</span>
+          <h3 class="pillar-title">Community-First Technology</h3>
+          <p class="pillar-body">Every product we build begins with listening — to survivors, advocates, and the people closest to the problem. Not to market research. Not to investors.</p>
+        </div>
+        <div class="pillar reveal d1">
+          <div class="pillar-accent"></div>
+          <span class="pillar-num">ii.</span>
+          <h3 class="pillar-title">Research & Advocacy</h3>
+          <p class="pillar-body">We translate community knowledge into data that moves policy, programs, and resources where they're needed most.</p>
+        </div>
+        <div class="pillar reveal d2">
+          <div class="pillar-accent"></div>
+          <span class="pillar-num">iii.</span>
+          <h3 class="pillar-title">Capacity Building</h3>
+          <p class="pillar-body">We share our tools, methods, and learnings with other organizations — because the mission is bigger than any one project.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects">
+      <div class="projects-header reveal">
+        <div>
+          <div class="section-eyebrow" style="margin-bottom:8px;">Active Projects</div>
+          <h2 class="section-heading" style="margin-bottom:0;font-size:clamp(28px,3vw,40px);">Where we show up.</h2>
+        </div>
+        <div class="projects-count">3 Projects</div>
+      </div>
+      <div class="project-row reveal">
+        <div class="p-num">01</div>
+        <div class="p-info"><div class="p-name">Bastet</div><div class="p-desc">A mobile resource locator connecting domestic violence survivors in the SC Lowcountry to shelters, hotlines, and safe places — built with survivors, for survivors.</div></div>
+        <div class="p-type">Mobile App</div>
+        <div class="p-status"><span class="status-pill s-live">Live — Beta</span></div>
+      </div>
+      <div class="project-row reveal d1">
+        <div class="p-num">02</div>
+        <div class="p-info"><div class="p-name">Seshat</div><div class="p-desc">A community research platform that turns lived experience into actionable data — closing the gap between people and the programs meant to help them.</div></div>
+        <div class="p-type">Research Platform</div>
+        <div class="p-status"><span class="status-pill s-build">In Development</span></div>
+      </div>
+      <div class="project-row reveal d2">
+        <div class="p-num">03</div>
+        <div class="p-info">
+          <div class="p-name">Project Malcolm</div>
+          <div class="p-desc">Details of this project are currently private during the discovery phase.</div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:5px 12px;background:rgba(74,25,66,0.05);border:1px solid rgba(74,25,66,0.12);border-radius:3px;">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="5" width="10" height="7" rx="1.5" stroke="#7A6B73" stroke-width="1.1"/><path d="M3.5 5V3.5a2.5 2.5 0 0 1 5 0V5" stroke="#7A6B73" stroke-width="1.1" stroke-linecap="round"/></svg>
+            <span style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);">Private discovery — details restricted</span>
+          </div>
+        </div>
+        <div class="p-type">Health Tech</div>
+        <div class="p-status"><span class="status-pill s-disc">Discovery</span></div>
+      </div>
+    </section>
+
+    <!-- IMPACT -->
+    <div class="impact">
+      <div class="impact-cell reveal"><div class="impact-num" style="font-size: 28px; padding-top: 15px;">South Carolina</div><div class="impact-label">Lowcountry Roots</div></div>
+      <div class="impact-cell reveal d1"><div class="impact-num">5+</div><div class="impact-label">Partner Organizations</div></div>
+      <div class="impact-cell reveal d2"><div class="impact-num">3</div><div class="impact-label">Active Platforms</div></div>
+      <div class="impact-cell reveal d3"><div class="impact-num">0%</div><div class="impact-label">Of people who deserve less</div></div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta-band">
+      <div class="cta-col reveal">
+        <div><h3>Fund the <em>work.</em></h3><p>Your support builds technology that reaches survivors, strengthens research, and proves what community innovation looks like when it's done with care.</p></div>
+        <a href="#" class="btn-gold">Make a Donation →</a>
+      </div>
+      <div class="cta-divider-line"></div>
+      <div class="cta-col reveal d1">
+        <div><h3>Partner <em>with us.</em></h3><p>If you're a funder, organization, technologist, or community member who wants to be part of something that actually matters — there's a place for you here.</p></div>
+        <a href="#" class="btn-outline-cream">Get in Touch →</a>
+      </div>
+    </section>
+
+  </div><!-- /page-home -->
+
+  <!-- ══ ABOUT PAGE ══ -->
+  <div id="page-about" class="page-section">
+    <section class="about-page">
+      
+      <div class="about-header reveal">
+        <span class="eyebrow">Our Story</span>
+        <h2>Rooted in the Lowcountry, <em>Built for Beyond.</em></h2>
+      </div>
+
+      <!-- OUR PURPOSE -->
+      <div class="about-section reveal">
+        <h3>Our Purpose</h3>
+        <div class="about-content">
+          <p class="about-lead">Marble Ceilings For Good (MCFG) is a non-profit innovation lab intent on producing user-friendly apps that target individuals who are often the last to know about help-seeking technologies.</p>
+        </div>
+      </div>
+
+      <!-- OUR ORIGINS -->
+      <div class="about-section reveal">
+        <h3>Our Origins</h3>
+        <div class="about-content">
+          <p>This endeavor is a lifetime in the making. I was taught early that if I could improve the lives of others, then I should. MCFG is the culmination of the lifelong influences of three people: my father (Bertram Moore, Jr), my mother (Viola Moore) and my aunt (Linda Gadson). </p>
+          <p>My father advised me that my interest in cutting edge technology should not just be a way to make a living, but that I should use my acquired knowledge to do something impactful. It was ingrained in me that I had a responsibility to use technology as a tool for good. </p>
+          <p>On the other hand, my mother was my earliest example of “Love thy neighbor”. If someone was in need, she was on the front lines making sure they got what they needed. She worked alongside my aunt who was the Executive Director at Rural Mission Inc, a non-profit organization that provided for the many needs of Sea Island residents in South Carolina. </p>
+          <p>They worked endless hours to serve those who came to them for help. Whether they distributing food, paying past due utility bills or repairing dilapidated homes, people knew that they could count on Vi and Linda. It was their calling. Each time they sat with someone in their most difficult moments, I paid attention. </p>
+          <p>Together, that trio taught me that community service isn't an abstract concept that you list on your resume’. It involves showing up for your neighbors and taking action regardless of the temperature outside or time of day because need often does not have perfect timing. I realized that serving others may not always be convenient, but you could make getting help more convenient. Rural Mission closed in 2019, but what it stood for didn't die. It still lives on in seeing the humanity of all people and that people on the margins deserve much more than good intentions.</p>
+        </div>
+      </div>
+
+      <!-- QUOTE BLOCK -->
+      <div class="about-section reveal">
+        <div class="about-quote-block">
+          <div class="about-quote-text">
+            "Rural Mission planted the seeds. <br><em>Marble Ceilings For Good is what has sprouted.</em>"
+          </div>
+          <div class="about-quote-sub">The Work Continues</div>
+        </div>
+      </div>
+
+      <!-- OUR VISION -->
+      <div class="about-section reveal">
+        <h3>Our Vision</h3>
+        <div class="about-content">
+          <p>We are creating useful technologies for people who would typically fall through the cracks of systems traditionally designed to help them. Our products provide common sense solutions for people in unfortunately common situations. We innovate for the domestic violence victim trying to find a safe place, for the needy family in search of benefits for which they might qualify, and for the patient managing a chronic illness without the necessary support. Our technology meets people where they are when they need it.</p>
+          <p>MCFG is a trusted ecosystem of tools that promote safety, care, and support. Each product we build addresses at least one of those functions and together they address the needs of vulnerable communities whose crises often occur consecutively and/or simultaneously.</p>
+          
+          <div class="ecosystem-grid">
+            <div class="ecosystem-card">
+              <h4>Bastet</h4>
+              <p>Provides up-to-date information for domestic violence victims (hotlines, emergency shelters, and other relevant resources).</p>
+            </div>
+            <div class="ecosystem-card">
+              <h4>Seshat</h4>
+              <p>Navigates through benefits systems for disadvantaged populations in South Carolina making the complex state and federal assistance programs more manageable.</p>
+            </div>
+            <div class="ecosystem-card">
+              <h4>Project Malcolm</h4>
+              <p>Features a patient-facing portal for the Sickle Cell Anemia community to access important data about and guidance on managing the disease.</p>
+            </div>
+          </div>
+
+          <p style="margin-top:40px;">This is just the beginning. The ecosystem will expand as needs arise.</p>
+        </div>
+      </div>
+
+      <!-- OUR FUTURE -->
+      <div class="about-section reveal">
+        <h3>Our Future</h3>
+        <div class="about-content">
+          <p>Rural Mission didn't close because the work was finished. Marble Ceilings For Good is a renewed promise to the communities that shaped us, to the people our products serve, and to Bertram, Viola, and Linda, whose lives inspired it. We are carrying those valuable lessons learned on the Sea Islands into every product we ship, every partnership we build, every person we reach.</p>
+          <p class="about-lead" style="border-left:none; padding-left:0; text-align:center;">The baton is in our hands now. <br><em>We intend to run with it.</em></p>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ══ BOARD PAGE ══ -->
+  <div id="page-board" class="page-section">
+    <section class="board-page">
+
+      <!-- Intro -->
+      <div class="board-intro">
+        <div class="board-intro-left reveal">
+          <div class="section-eyebrow">Leadership</div>
+          <h2 class="section-heading reveal d1" style="margin-bottom:0;">The people who said yes <em style="font-family:'DM Serif Display',serif;font-style:italic;color:var(--accent);">first.</em></h2>
+        </div>
+        <div class="board-intro-right reveal d2">
+          <p>Our board brings together expertise in public health, community organizing, technology, and advocacy — with roots in the communities we serve. Credibility and community aren't opposites here. They're the same thing.</p>
+        </div>
+      </div>
+
+      <!-- Founder card — full width -->
+      <div class="board-grid" style="margin-bottom:2px;">
+        <div class="board-card founder reveal">
+          <div class="board-layout">
+            <div class="board-portrait" style="background:var(--accent);">
+              <div class="board-monogram" style="font-size:120px;color:rgba(255,255,255,0.2);">B</div>
+              <div class="board-role-badge">
+                <span class="board-role-text">Founder &amp; Executive Director</span>
+                <span class="board-role-org">MCFG</span>
+              </div>
+            </div>
+            <div class="board-body">
+              <div class="board-name">Bertram Leroy Moore III</div>
+              <div class="board-title">Founder · Executive Director · Director</div>
+              <p class="board-bio">Bertram is the founder and executive director of Marble Ceilings For Good, and the architect of the Bastet app. A technologist and community builder from the South Carolina Lowcountry, his work is rooted in the belief that the people closest to a problem are the ones best equipped to solve it — and that they deserve the same quality of tools as anyone else. He serves as the organization's registered agent and holds the primary operational and strategic vision for MCFG and all of its projects.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Board members grid -->
+      <div class="board-grid">
+        <div class="board-card reveal">
+          <div class="board-portrait board-portrait-alt">
+            <div class="board-monogram">B</div>
+            <div class="board-role-badge">
+              <span class="board-role-text">Board Chair</span>
+              <span class="board-role-org">MCFG</span>
+            </div>
+          </div>
+          <div class="board-body">
+            <div class="board-name">Dr. Bertrina Lynn Scott</div>
+            <div class="board-title">Board Chair · Director</div>
+            <p class="board-bio">Dr. Scott holds a PhD and brings deep expertise in public health, advocacy, and community systems. As Board Chair, she provides governance oversight and strategic direction — ensuring that MCFG's work remains grounded in both rigorous practice and community trust. She was among the first to believe in this organization's potential.</p>
+          </div>
+        </div>
+
+        <div class="board-card reveal d1">
+          <div class="board-portrait board-portrait-alt2">
+            <div class="board-monogram">Y</div>
+            <div class="board-role-badge">
+              <span class="board-role-text">Secretary</span>
+              <span class="board-role-org">MCFG</span>
+            </div>
+          </div>
+          <div class="board-body">
+            <div class="board-name">Yaunna Stewart</div>
+            <div class="board-title">Secretary · Director</div>
+            <p class="board-bio">Yaunna serves as Secretary of the board, responsible for governance documentation, meeting records, and ensuring that the organization's decisions are captured and carried forward with integrity. Her attention to detail and commitment to the mission make her an essential part of MCFG's foundation.</p>
+          </div>
+        </div>
+
+        <div class="board-card reveal d2" style="border: 1px dashed rgba(74,25,66,0.18); background: var(--sand);">
+          <div class="board-portrait" style="background: var(--sand); border-bottom: 1px dashed rgba(74,25,66,0.18);">
+            <div class="board-monogram" style="color: rgba(74,25,66,0.10);">T</div>
+            <div class="board-role-badge" style="background: rgba(74,25,66,0.08);">
+              <span class="board-role-text" style="color:var(--mid);">Treasurer</span>
+              <span class="board-role-org">Recruiting</span>
+            </div>
+          </div>
+          <div class="board-body">
+            <div class="board-name" style="color:var(--mid);">Treasurer</div>
+            <div class="board-title" style="color:rgba(201,168,76,0.5);">Position Open</div>
+            <p class="board-bio" style="color:rgba(122,107,115,0.6);">We're actively recruiting a Treasurer with a background in finance, accounting, or nonprofit financial management. If you're passionate about community-centered work and want to help build something meaningful from the ground up, we'd love to hear from you.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contributors -->
+      <div class="contributors-section">
+        <div class="section-eyebrow" style="margin-bottom:32px;">Contributors</div>
+        <div class="contributors-grid">
+          
+          <div class="contributor-card reveal">
+            <div class="contributor-portrait">
+              <img src="images/leaeryn.png" alt="Leaeryn Moore">
+            </div>
+            <div class="contributor-info">
+              <div class="contributor-name">Leaeryn Moore</div>
+              <div class="contributor-title">Outreach Director</div>
+            </div>
+          </div>
+
+          <div class="contributor-card reveal d1">
+            <div class="contributor-portrait">
+              <img src="images/placeholder.png" alt="Contributor Placeholder">
+            </div>
+            <div class="contributor-info">
+              <div class="contributor-name">Future Contributor</div>
+              <div class="contributor-title">Community Partner</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CTA repeated on board page -->
+    <section class="cta-band">
+      <div class="cta-col">
+        <div><h3>Join the <em>board.</em></h3><p>We're looking for a Treasurer and additional directors who bring both expertise and heart. If you believe communities deserve better tools, let's talk.</p></div>
+        <a href="#" class="btn-gold">Express Interest →</a>
+      </div>
+      <div class="cta-divider-line"></div>
+      <div class="cta-col">
+        <div><h3>Support the <em>mission.</em></h3><p>Whether through funding, partnership, or volunteer expertise — there's a place for you in this work.</p></div>
+        <a href="#" class="btn-outline-cream">Get in Touch →</a>
+      </div>
+    </section>
+  </div><!-- /page-board -->
+
+  <footer>
+    <div>
+      <div class="footer-brand">Marble Ceilings For Good</div>
+      <div class="footer-sub">Berkeley County, South Carolina <span class="footer-gold-dot"></span> 501(c)(3) In Formation</div>
+    </div>
+    <div class="footer-right">Bastet <span class="footer-gold-dot"></span> Seshat <span class="footer-gold-dot"></span> Project Malcolm<br>&copy; 2026 Marble Ceilings For Good</div>
+  </footer>
+
+</div><!-- /site -->
+
+<script>
+/* ══════════════════════════════════════════
+   ROOT + LIGHT ANIMATION
+══════════════════════════════════════════ */
+const canvas = document.getElementById('root-canvas');
+const ctx = canvas.getContext('2d');
+
+// Skip intro if already seen in this session
+if (sessionStorage.getItem('mcfg_intro_seen')) {
+  const intro = document.getElementById('intro');
+  intro.style.display = 'none';
+  intro.classList.add('done');
+  document.getElementById('main-nav').classList.add('visible');
+  document.getElementById('site').classList.add('visible');
+  window.addEventListener('load', () => initReveal());
+}
+
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Branch system
+const branches = [];
+const W = () => canvas.width;
+const H = () => canvas.height;
+
+class Branch {
+  constructor(x, y, angle, length, depth, delay) {
+    this.x = x; this.y = y;
+    this.angle = angle;
+    this.maxLength = length;
+    this.depth = depth;
+    this.delay = delay; // ms before this branch starts growing
+    this.progress = 0;
+    this.growing = false;
+    this.done = false;
+    this.children = [];
+    this.childrenSpawned = false;
+    // Color: deeper roots = warmer brown, higher branches = gold-tinged
+    const t = 1 - (depth / 8);
+    const r = Math.round(60 + t * 100);
+    const g = Math.round(30 + t * 60);
+    const b = Math.round(20 + t * 20);
+    this.color = `rgba(${r},${g},${b},`;
+    this.width = Math.max(0.4, 2.5 - depth * 0.28);
+  }
+
+  start(t) {
+    if (!this.growing && t >= this.delay) this.growing = true;
+  }
+
+  update(dt) {
+    if (!this.growing || this.done) return;
+    this.progress += dt * (0.0012 + Math.random() * 0.0004);
+    if (this.progress >= 1) {
+      this.progress = 1;
+      this.done = true;
+    }
+    // Spawn children partway through
+    if (this.progress > 0.75 && !this.childrenSpawned && this.depth < 7) {
+      this.childrenSpawned = true;
+      const spread = 0.28 + Math.random() * 0.18;
+      const childLen = this.maxLength * (0.58 + Math.random() * 0.2);
+      const childDelay = this.delay + this.maxLength / 0.9;
+      if (Math.random() > 0.25) {
+        this.children.push(new Branch(0, 0, this.angle - spread, childLen, this.depth + 1, childDelay));
+      }
+      if (Math.random() > 0.2) {
+        this.children.push(new Branch(0, 0, this.angle + spread + (Math.random() * 0.15), childLen * 0.85, this.depth + 1, childDelay + 60));
+      }
+      if (this.depth < 3 && Math.random() > 0.5) {
+        this.children.push(new Branch(0, 0, this.angle - spread * 0.3, childLen * 0.7, this.depth + 1, childDelay + 30));
+      }
+    }
+  }
+
+  draw(t, parentX, parentY) {
+    if (!this.growing) return;
+    // Compute tip position
+    const len = this.maxLength * this.progress;
+    const tipX = parentX + Math.cos(this.angle) * len;
+    const tipY = parentY + Math.sin(this.angle) * len;
+
+    ctx.beginPath();
+    ctx.moveTo(parentX, parentY);
+    ctx.lineTo(tipX, tipY);
+    const alpha = Math.min(0.85, 0.3 + (1 - this.depth / 8) * 0.55);
+    ctx.strokeStyle = this.color + alpha + ')';
+    ctx.lineWidth = this.width;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Tiny dots at tips
+    if (this.done && this.depth > 4) {
+      ctx.beginPath();
+      ctx.arc(tipX, tipY, 0.8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(199,199,199,0.3)`;
+      ctx.fill();
+    }
+
+    // Draw children from tip
+    for (const child of this.children) {
+      child.start(t);
+      child.update(16);
+      child.draw(t, tipX, tipY);
+    }
+  }
+}
+
+// Seed roots from bottom center, slightly spread
+let startTime = null;
+let rootsSeeded = false;
+const roots = [];
+
+function seedRoots() {
+  const cx = W() * 0.5;
+  const base = H() + 10;
+  const angles = [
+    -Math.PI / 2,
+    -Math.PI / 2 - 0.22,
+    -Math.PI / 2 + 0.22,
+    -Math.PI / 2 - 0.5,
+    -Math.PI / 2 + 0.5,
+    -Math.PI / 2 - 0.08,
+    -Math.PI / 2 + 0.08,
+  ];
+  const lens = [280, 220, 240, 180, 170, 260, 250];
+  const delays = [0, 80, 80, 200, 200, 40, 40];
+
+  angles.forEach((a, i) => {
+    const r = new Branch(cx + (i - 3) * 28, base, a, lens[i], 0, delays[i]);
+    r.growing = false;
+    roots.push(r);
+  });
+}
+
+/* ── Leaf system ── */
+const allLeaves = [];
+let leavesSpawned = false;
+let leafSpawnTime = 0;
+
+class Leaf {
+  constructor(x, y, angle, spawnedAt) {
+    this.x = x + (Math.random() - 0.5) * 22;
+    this.y = y + (Math.random() - 0.5) * 22;
+    this.rot = angle - Math.PI / 2 + (Math.random() - 0.5) * 1.6;
+    this.w = 2.5 + Math.random() * 3.5;
+    this.h = 5 + Math.random() * 7;
+    this.maxScale = 0.8 + Math.random() * 0.6;
+    this.delay = Math.random() * 800;
+    this.spawnedAt = spawnedAt;
+    const warm = Math.random();
+    this.r = Math.round(185 + warm * 35);
+    this.g = Math.round(185 + warm * 35);
+    this.b = Math.round(185 + warm * 35);
+  }
+
+  draw(elapsed) {
+    const age = elapsed - this.spawnedAt - this.delay;
+    if (age <= 0) return;
+    const t = Math.min(1, age / 900);
+    const scale = (1 - Math.pow(1 - t, 3)) * this.maxScale;
+    const alpha = scale * 0.78;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.scale(scale, scale);
+    ctx.beginPath();
+    ctx.moveTo(0, -this.h);
+    ctx.bezierCurveTo( this.w, -this.h * 0.35,  this.w,  this.h * 0.35, 0,  this.h);
+    ctx.bezierCurveTo(-this.w,  this.h * 0.35, -this.w, -this.h * 0.35, 0, -this.h);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(${this.r},${this.g},${this.b},${alpha})`;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, -this.h * 0.75);
+    ctx.lineTo(0,  this.h * 0.75);
+    ctx.strokeStyle = `rgba(${this.r - 18},${this.g - 18},${this.b},${alpha * 0.35})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function collectTips(branch, px, py, tips) {
+  // Compute where THIS branch's tip actually is in screen space
+  const len = branch.maxLength * branch.progress;
+  const tx = px + Math.cos(branch.angle) * len;
+  const ty = py + Math.sin(branch.angle) * len;
+
+  if (branch.growing) {
+    if (branch.children.length === 0) {
+      // Terminal tip — always collect regardless of depth
+      tips.push({ x: tx, y: ty, angle: branch.angle });
+    } else if (branch.depth >= 3) {
+      // Mid-branch node deep enough — also collect as a leaf site
+      tips.push({ x: tx, y: ty, angle: branch.angle });
+    }
+  }
+
+  // Recurse — pass THIS tip as the parent origin for children
+  for (const child of branch.children) {
+    collectTips(child, tx, ty, tips);
+  }
+}
+
+function spawnLeaves(elapsed) {
+  const tips = [];
+  // Each root starts at its own (root.x, root.y) which is at the bottom edge
+  // Children accumulate positions upward from there
+  for (const root of roots) {
+    collectTips(root, root.x, root.y, tips);
+  }
+
+  // Filter to only tips that are actually on screen (above the bottom third)
+  const screenTips = tips.filter(t => t.y < H() * 0.75);
+  const source = screenTips.length > 0 ? screenTips : tips;
+
+  for (const tip of source) {
+    const count = 5 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < count; i++) {
+      allLeaves.push(new Leaf(tip.x, tip.y, tip.angle, elapsed));
+    }
+  }
+}
+
+/* Light shaft fade-in timeline */
+const LS1 = document.getElementById('ls1');
+const LS2 = document.getElementById('ls2');
+const LS3 = document.getElementById('ls3');
+const introText = document.getElementById('intro-text');
+
+function fadeEl(el, targetOpacity, durationMs, delayMs) {
+  setTimeout(() => {
+    el.style.transition = `opacity ${durationMs}ms ease`;
+    el.style.opacity = targetOpacity;
+  }, delayMs);
+}
+
+let animFrame;
+let elapsed = 0;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  elapsed = ts - startTime;
+
+  ctx.clearRect(0, 0, W(), H());
+
+  // Phase 1: Quote (0-5s)
+  const quoteEl = document.getElementById('intro-quote');
+  if (elapsed < 1000) {
+    quoteEl.style.opacity = Math.min(1, elapsed / 1000);
+  } else if (elapsed > 3000 && elapsed < 6000) {
+    quoteEl.style.opacity = Math.max(0, 1 - (elapsed - 3000) / 3000);
+  } else if (elapsed >= 6000) {
+    quoteEl.style.display = 'none';
+  } else if (elapsed >= 1000 && elapsed <= 3000) {
+    quoteEl.style.opacity = 1;
+  }
+
+  // Phase 2: Tree (Starts at 3.5s - overlap with quote fade)
+  const treeElapsed = elapsed - 3500;
+  if (treeElapsed >= 0) {
+    if (!rootsSeeded) { seedRoots(); rootsSeeded = true; }
+    for (const root of roots) {
+      root.start(treeElapsed);
+      root.update(16);
+      root.draw(treeElapsed, root.x, root.y);
+    }
+
+    // Light shafts appear at ~1.8s into tree phase (5300 total)
+    if (treeElapsed > 1800 && LS1.style.opacity === '') {
+      fadeEl(LS1, 1, 1400, 0);
+      fadeEl(LS2, 1, 1200, 300);
+      fadeEl(LS3, 1, 1000, 600);
+    }
+
+    // Leaves bloom at ~3.2s into tree phase (6700 total)
+    if (treeElapsed > 3200 && !leavesSpawned) {
+      leavesSpawned = true;
+      spawnLeaves(treeElapsed);
+    }
+    for (const leaf of allLeaves) {
+      leaf.draw(treeElapsed);
+    }
+
+    // Org name at ~3.5s into tree phase (7000 total)
+    if (treeElapsed > 3500 && introText.style.opacity === '') {
+      introText.style.transition = 'opacity 1.1s ease, transform 1.1s ease';
+      introText.style.opacity = 1;
+      introText.style.transform = 'translateY(0)';
+    }
+  }
+
+  // Exit at ~11s total
+  if (elapsed < 11000) {
+    animFrame = requestAnimationFrame(animate);
+  } else {
+    exitIntro();
+  }
+}
+
+function exitIntro() {
+  const intro = document.getElementById('intro');
+  intro.classList.add('exiting');
+  sessionStorage.setItem('mcfg_intro_seen', 'true'); // Save state
+  setTimeout(() => {
+    intro.classList.add('done');
+    intro.style.display = 'none';
+    document.getElementById('main-nav').classList.add('visible');
+    document.getElementById('site').classList.add('visible');
+    initReveal();
+  }, 1000);
+}
+
+// Kick off
+requestAnimationFrame(animate);
+
+/* ══════════════════════════════════════════
+   PAGE SWITCHING
+══════════════════════════════════════════ */
+function showPage(id, el) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+
+  // Match nav link
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.remove('active');
+    const linkText = a.textContent.toLowerCase();
+    if (id === 'home' && linkText === 'our work') a.classList.add('active');
+    if (id === 'about' && linkText === 'about') a.classList.add('active');
+    if (id === 'board' && linkText === 'board') a.classList.add('active');
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  initReveal();
+}
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+function initReveal() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+}
+
+/* ══════════════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════════════ */
+const navToggle = document.getElementById('nav-toggle');
+const navLinks = document.getElementById('nav-links');
+const navOverlay = document.getElementById('nav-overlay');
+
+function toggleMobileMenu() {
+  if (window.innerWidth > 1024) return;
+  navToggle.classList.toggle('active');
+  navLinks.classList.toggle('active');
+  navOverlay.classList.toggle('active');
+  document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+}
+
+if (navToggle) {
+  navToggle.addEventListener('click', toggleMobileMenu);
+}
+
+// Skip animation on second visit
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' || e.key === ' ') {
+    cancelAnimationFrame(animFrame);
+    exitIntro();
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon | Marble Ceilings For Good</title>
+  
+  <!-- Fonts: Gloock and Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --jordan-blue: #1E95B2;
+      --eggplant: #614051;
+      --eggplant-glow: rgba(97, 64, 81, 0.4);
+      --jordan-glow: rgba(30, 149, 178, 0.4);
+      --bg-dark: #0b0b0b;
+      --text-light: #F2F3ED;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      
+      --font-display: 'Gloock', serif;
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #2b1a2b 0%, #0b0b0b 100%);
+      color: var(--text-light);
+      font-family: var(--font-body);
+      overflow: hidden;
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    /* Titles */
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 56px);
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+      
+      /* Subtle gradient text */
+      background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      animation: fadeInDown 1.2s ease forwards 0.3s;
+    }
+
+    .page-subtitle {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(12px, 2vw, 16px);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--jordan-blue);
+      text-align: center;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.6s;
+    }
+
+                /* Periodic Grid */
+    .periodic-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 130px);
+      grid-template-rows: repeat(3, 130px);
+      gap: 2px;
+      justify-content: center;
+      position: relative;
+      perspective: 1200px;
+    }
+
+    /* Element Card */
+    .element-card {
+      background: rgba(255, 255, 255, 0.05); /* slightly more visible */
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 4px; /* subtle rounding for glass */
+      backdrop-filter: blur(14px); /* deeper frost */
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.95);
+      cursor: default;
+      box-shadow: 
+        inset 0 0 10px rgba(255, 255, 255, 0.05),
+        0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    .element-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .element-card:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      z-index: 20 !important;
+      border-radius: 4px;
+    }
+
+    .element-top-row {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: rgba(242, 243, 237, 0.6);
+      font-weight: 500;
+    }
+
+    .element-symbol {
+      font-family: var(--font-display);
+      font-size: 48px;
+      line-height: 1;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .element-name {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(242, 243, 237, 0.85);
+      text-align: center;
+    }
+
+    /* Grid Positioning & Colored Borders */
+    .el-kn { grid-column: 2; grid-row: 1; border-top: 3px solid var(--jordan-blue); border-bottom: 1px solid rgba(30,149,178,0.2); animation: flipIn 0.8s forwards 1.2s; }
+    
+    .el-cr { grid-column: 1; grid-row: 2; border-top: 3px solid #dba9a9; border-bottom: 1px solid rgba(219,169,169,0.2); animation: flipIn 0.8s forwards 1.0s; }
+    
+    /* Center MCFG Element (Maintains its own style) */
+    .el-mcfg {
+      grid-column: 2;
+      grid-row: 2;
+      background: rgba(30, 149, 178, 0.05);
+      border: 1px solid rgba(30, 149, 178, 0.4);
+      animation: flipInCenter 1.2s forwards 1.4s;
+      z-index: 10;
+    }
+
+    .el-mcfg::before {
+      background: radial-gradient(circle at center, rgba(97, 64, 81, 0.15), transparent 70%);
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+    }
+
+    .el-mcfg:hover {
+      transform: scale(1.05);
+      background: rgba(30, 149, 178, 0.12);
+      border-color: var(--jordan-blue);
+      box-shadow: 0 15px 40px var(--jordan-glow), 0 0 20px var(--eggplant-glow);
+    }
+
+    .el-mcfg .element-symbol {
+      color: #fff;
+      font-size: 38px;
+      text-align: center;
+      background: linear-gradient(90deg, #fff, var(--jordan-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .el-te { grid-column: 3; grid-row: 2; border-top: 3px solid #aab5d1; border-bottom: 1px solid rgba(170,181,209,0.2); animation: flipIn 0.8s forwards 1.4s; }
+    
+    .el-sp { grid-column: 2; grid-row: 3; border-top: 3px solid #cbad9b; border-bottom: 1px solid rgba(203,173,155,0.2); animation: flipIn 0.8s forwards 1.2s; }
+    .el-co { grid-column: 3; grid-row: 3; border-top: 3px solid var(--eggplant); border-bottom: 1px solid rgba(97,64,81,0.2); animation: flipIn 0.8s forwards 1.4s; }
+    .el-sa { grid-column: 4; grid-row: 3; border-top: 3px solid #e3c766; border-bottom: 1px solid rgba(227,199,102,0.2); animation: flipIn 0.8s forwards 1.6s; }
+
+    /* Bottom Date Strip */
+    /* Bottom Date Strip */
+    .launch-strip {
+      margin-top: 80px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 2.2s;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .launch-strip::before, .launch-strip::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes flipIn {
+      0% { opacity: 0; transform: perspective(1000px) rotateY(-90deg) scale(0.95); }
+      60% { opacity: 1; transform: perspective(1000px) rotateY(10deg) scale(1.02); }
+      80% { opacity: 1; transform: perspective(1000px) rotateY(-5deg) scale(1); }
+      100% { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); }
+    }
+
+    @keyframes flipInCenter {
+      0% { opacity: 0; transform: perspective(1000px) rotateY(-90deg) scale(0.9); box-shadow: none; }
+      60% { opacity: 1; transform: perspective(1000px) rotateY(10deg) scale(1.05); box-shadow: 0 0 60px var(--eggplant-glow); }
+      80% { opacity: 1; transform: perspective(1000px) rotateY(-5deg) scale(1); box-shadow: 0 0 40px var(--eggplant-glow); }
+      100% { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); box-shadow: 0 0 40px var(--eggplant-glow); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .periodic-grid {
+        grid-template-columns: repeat(4, 90px);
+        grid-template-rows: repeat(3, 90px);
+        gap: 1.5px;
+      }
+      .element-symbol { font-size: 36px; margin-top: 8px; }
+      .el-mcfg .element-symbol { font-size: 24px; margin-top: 18px; }
+      .element-top-row { font-size: 8px; top: 4px; left: 4px; right: 4px; }
+      .element-name { font-size: 7px; }
+      
+      @keyframes flipInCenter {
+        0% { opacity: 0; transform: perspective(1000px) rotateY(90deg) scale(0.9); }
+        100% { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); }
+      }
+    }
+
+    @media (max-width: 480px) {
+      .periodic-grid {
+        /* Restructure to fit entirely on mobile */
+        grid-template-columns: repeat(3, 100px);
+        grid-template-rows: repeat(3, 100px);
+        justify-content: center;
+        gap: 2px;
+      }
+      .el-kn { grid-column: 2; grid-row: 1; }
+      .el-cr { grid-column: 1; grid-row: 1; }
+      .el-mcfg { grid-column: 2; grid-row: 2; }
+      .el-te { grid-column: 3; grid-row: 2; }
+      .el-sp { grid-column: 1; grid-row: 2; }
+      .el-co { grid-column: 2; grid-row: 3; }
+      .el-sa { grid-column: 3; grid-row: 3; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="page-title">The Elements of Change</h1>
+    <div class="page-subtitle">Marble Ceilings For Good</div>
+
+    <!-- Periodic Table -->
+    <div class="periodic-grid">
+      
+      <!-- Row 1 -->
+      <div class="element-card el-kn">
+        <div class="element-top-row">
+          <span class="atomic-num">1</span>
+          <span class="atomic-mass">1.008</span>
+        </div>
+        <div class="element-symbol">Kn</div>
+        <div class="element-name">Kindness</div>
+      </div>
+      
+      <!-- Row 2 -->
+      <div class="element-card el-cr">
+        <div class="element-top-row">
+          <span class="atomic-num">3</span>
+          <span class="atomic-mass">6.940</span>
+        </div>
+        <div class="element-symbol">Cr</div>
+        <div class="element-name">Creativity</div>
+      </div>
+
+      <div class="element-card el-mcfg">
+        <div class="element-top-row" style="color: var(--jordan-blue);">
+          <span class="atomic-num">MC</span>
+          <span class="atomic-mass">20.26</span>
+        </div>
+        <div class="element-symbol">MCFG</div>
+        <div class="element-name" style="letter-spacing: 0.15em;">The Core</div>
+      </div>
+
+      <div class="element-card el-te">
+        <div class="element-top-row">
+          <span class="atomic-num">4</span>
+          <span class="atomic-mass">9.012</span>
+        </div>
+        <div class="element-symbol">Te</div>
+        <div class="element-name">Technology</div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="element-card el-sp">
+        <div class="element-top-row">
+          <span class="atomic-num">5</span>
+          <span class="atomic-mass">10.81</span>
+        </div>
+        <div class="element-symbol">Sp</div>
+        <div class="element-name">Support</div>
+      </div>
+
+      <div class="element-card el-co">
+        <div class="element-top-row">
+          <span class="atomic-num">6</span>
+          <span class="atomic-mass">12.01</span>
+        </div>
+        <div class="element-symbol">Co</div>
+        <div class="element-name">Community</div>
+      </div>
+
+      <div class="element-card el-sa">
+        <div class="element-top-row">
+          <span class="atomic-num">2</span>
+          <span class="atomic-mass">4.002</span>
+        </div>
+        <div class="element-symbol">Sa</div>
+        <div class="element-name">Safety</div>
+      </div>
+
+    </div>
+
+    <div class="launch-strip">
+      Launching Summer 2026
+    </div>
+  </div>
+
+</body>
+</html>
