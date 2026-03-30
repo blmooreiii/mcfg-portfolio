@@ -3,7 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marble Ceilings For Good</title>
+<title>Marble Ceilings For Good — Community Innovation Lab</title>
+<meta name="description" content="Marble Ceilings For Good is a South Carolina nonprofit building technology for communities that have been overlooked — starting in the Lowcountry with apps for domestic violence survivors, benefits navigation, and chronic illness support.">
+<meta name="keywords" content="nonprofit technology, South Carolina, Lowcountry, domestic violence app, community innovation, Bastet app, Berkeley County SC">
+<meta property="og:title" content="Marble Ceilings For Good">
+<meta property="og:description" content="Technology that moves people forward. A nonprofit innovation lab building apps for communities that need them most.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.mc-fg.org">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Marble Ceilings For Good">
+<meta name="twitter:description" content="Technology that moves people forward. A nonprofit innovation lab building apps for communities that need them most.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.mc-fg.org">
 <link rel="stylesheet" href="https://use.typekit.net/olk5una.css">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -577,7 +588,61 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
   .hero-tagline-wrap { padding-top: 24px; }
   .hero-h1 { font-size: 34px; }
 }
-</style>
+
+/* ════════════════════════════════
+   WAITLIST MODAL
+════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(14,8,13,0.7);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 24px;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--cream); max-width: 520px; width: 100%;
+  padding: 56px 48px; position: relative;
+  transform: translateY(20px); transition: transform 0.35s ease;
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none; cursor: pointer;
+  font-size: 20px; color: var(--mid); line-height: 1;
+  padding: 4px 8px; transition: color 0.2s;
+}
+.modal-close:hover { color: var(--plum); }
+.modal-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.modal-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+.modal-title { font-family: var(--font-headline); font-weight: 700; font-size: 32px; color: var(--plum); line-height: 1.15; margin-bottom: 12px; }
+.modal-title em { font-style: italic; }
+.modal-body { font-size: 14px; line-height: 1.8; color: var(--mid); margin-bottom: 32px; }
+.modal-form { display: flex; flex-direction: column; gap: 14px; }
+.modal-input {
+  width: 100%; padding: 14px 18px;
+  border: 1px solid var(--light-border); background: white;
+  font-family: var(--font-body); font-size: 15px; color: var(--ink);
+  outline: none; transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.modal-input:focus { border-color: var(--accent); }
+.modal-input::placeholder { color: rgba(74,63,69,0.45); }
+.modal-submit {
+  padding: 15px 32px; background: var(--plum); color: var(--cream);
+  border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  transition: background 0.2s, transform 0.2s;
+}
+.modal-submit:hover { background: var(--plum-deep); transform: translateY(-1px); }
+.modal-success { display: none; text-align: center; padding: 20px 0; }
+.modal-success-icon { font-size: 36px; margin-bottom: 16px; }
+.modal-success h4 { font-family: var(--font-headline); font-weight: 700; font-size: 22px; color: var(--plum); margin-bottom: 10px; }
+.modal-success p { font-size: 14px; color: var(--mid); line-height: 1.7; }
+.modal-note { font-size: 11px; color: rgba(74,63,69,0.5); margin-top: 12px; text-align: center; letter-spacing: 0.04em; }
 </head>
 <body>
 
@@ -614,7 +679,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
     <li><a href="#" onclick="showPage('board',this);toggleMobileMenu()">Board</a></li>
     <li><a href="#" onclick="showPage('home','#page-home-anchor');toggleMobileMenu()">Impact</a></li>
   </ul>
-  <a href="#" class="nav-cta">Support Us</a>
+  <a href="#" onclick="openWaitlist();return false;" class="nav-cta">Support Us</a>
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
     <span></span>
     <span></span>
@@ -794,7 +859,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
     <section class="cta-band">
       <div class="cta-col reveal">
         <div><h3>Fund the <em>work.</em></h3><p>Your support builds technology that reaches survivors, strengthens research, and proves what community innovation looks like when it's done with care.</p></div>
-        <a href="#" class="btn-gold">Make a Donation →</a>
+        <a href="#" onclick="openWaitlist();return false;" class="btn-gold">Join the Waitlist →</a>
       </div>
       <div class="cta-divider-line"></div>
       <div class="cta-col reveal d1">
@@ -977,16 +1042,6 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
             <div class="contributor-info">
               <div class="contributor-name">Leaeryn Moore</div>
               <div class="contributor-title">Outreach Director</div>
-            </div>
-          </div>
-
-          <div class="contributor-card reveal d1">
-            <div class="contributor-portrait">
-              <img src="images/placeholder.png" alt="Contributor Placeholder">
-            </div>
-            <div class="contributor-info">
-              <div class="contributor-name">Future Contributor</div>
-              <div class="contributor-title">Community Partner</div>
             </div>
           </div>
 
@@ -1395,10 +1450,61 @@ if (navToggle) {
 // Skip animation on second visit
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' || e.key === ' ') {
-    cancelAnimationFrame(animFrame);
-    exitIntro();
+    if (document.getElementById('waitlist-modal').classList.contains('open')) {
+      closeWaitlist();
+    } else {
+      cancelAnimationFrame(animFrame);
+      exitIntro();
+    }
   }
 });
+
+/* ══════════════════════════════════════════
+   WAITLIST MODAL
+══════════════════════════════════════════ */
+function openWaitlist() {
+  document.getElementById('waitlist-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeWaitlist() {
+  document.getElementById('waitlist-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function submitWaitlist(e) {
+  e.preventDefault();
+  const name = document.getElementById('wl-name').value.trim();
+  const email = document.getElementById('wl-email').value.trim();
+  if (!name || !email) return;
+  document.getElementById('wl-form').style.display = 'none';
+  document.getElementById('wl-success').style.display = 'block';
+}
+document.getElementById('waitlist-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeWaitlist();
+});
 </script>
+
+<!-- WAITLIST MODAL -->
+<div class="modal-overlay" id="waitlist-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeWaitlist()" aria-label="Close">✕</button>
+    <div id="wl-form">
+      <div class="modal-eyebrow">Stay Connected</div>
+      <h2 class="modal-title">Support is <em>coming.</em></h2>
+      <p class="modal-body">We're in the process of receiving our 501(c)(3) status. Join our waitlist to be the first to know when donations open — and to stay in the loop on our work in the meantime.</p>
+      <form class="modal-form" onsubmit="submitWaitlist(event)">
+        <input class="modal-input" id="wl-name" type="text" placeholder="Your name" required autocomplete="name">
+        <input class="modal-input" id="wl-email" type="email" placeholder="Your email address" required autocomplete="email">
+        <button class="modal-submit" type="submit">Join the Waitlist →</button>
+      </form>
+      <p class="modal-note">No spam. Just updates on our work and when giving opens.</p>
+    </div>
+    <div class="modal-success" id="wl-success">
+      <div class="modal-success-icon">🌿</div>
+      <h4>You're on the list.</h4>
+      <p>Thank you for believing in this work. We'll be in touch as soon as our 501(c)(3) status is confirmed and giving opens.</p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
