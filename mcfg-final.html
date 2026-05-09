@@ -125,6 +125,27 @@ body { background: var(--cream); color: var(--ink); font-family: var(--font-body
   100% { clip-path: inset(0 0 100% 0); opacity: 1; }
 }
 
+/* Skip Intro Button */
+.skip-intro {
+  position: absolute; bottom: 40px; right: 40px; z-index: 100;
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-body);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+  cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 1s;
+}
+.skip-intro:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white; border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
 /* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0;
@@ -268,7 +289,7 @@ nav.visible { opacity: 1; }
 .mosaic-project-item:first-child { border-top: none; }
 .mosaic-project-item:hover { padding-left: 4px; }
 .mosaic-project-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); line-height: 1.3; }
-.mosaic-project-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(201,168,76,0.8); flex-shrink: 0; margin-left: 8px; }
+.mosaic-project-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(201,168,76,1); flex-shrink: 0; margin-left: 8px; }
 
 /* ════════════════════════════════
    MISSION STRIP
@@ -316,10 +337,34 @@ nav.visible { opacity: 1; }
 .p-desc { font-size: 17px; color: var(--mid); line-height: 1.6; font-weight: 300; max-width: 520px; }
 .p-type { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); white-space: nowrap; }
 .p-status { text-align: right; white-space: nowrap; }
-.status-pill { display: inline-block; padding: 6px 16px; border-radius: 40px; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid; }
-.s-live { border-color: rgba(201,168,76,0.4); color: var(--accent); background: rgba(201,168,76,0.06); }
-.s-build { border-color: var(--light-border); color: var(--mid); }
-.s-disc { border-color: var(--light-border); color: rgba(122,107,115,0.5); }
+.status-pill { display: inline-block; padding: 6px 16px; border-radius: 40px; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: 2px solid; }
+.s-live { border-color: rgba(201,168,76,0.6); color: var(--accent); background: rgba(201,168,76,0.06); }
+.s-build { border-color: rgba(74,25,66,0.4); color: var(--plum); font-size: 13px; }
+.s-disc { border-color: rgba(74,25,66,0.25); color: var(--mid); }
+
+/* ════════════════════════════════
+   MEDIA SECTION
+   ════════════════════════════════ */
+.media-section { background: var(--sand); padding: 100px 56px; border-top: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 40px; margin-top: 60px; }
+.media-card { position: relative; cursor: pointer; }
+.media-thumb { 
+  aspect-ratio: 16/9; background: var(--plum); position: relative; overflow: hidden; 
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.media-card:hover .media-thumb { transform: translateY(-8px); }
+.media-play-btn {
+  width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.3); z-index: 2; transition: background 0.3s;
+}
+.media-play-btn svg { fill: white; margin-left: 4px; }
+.media-card:hover .media-play-btn { background: var(--accent); border-color: var(--accent); }
+.media-info { padding: 24px 0; }
+.media-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; display: block; }
+.media-title { font-family: var(--font-headline); font-size: 24px; color: var(--plum); margin-bottom: 8px; line-height: 1.2; }
+.media-desc { font-size: 16px; line-height: 1.6; color: var(--mid); font-weight: 300; }
 
 /* ════════════════════════════════
    IMPACT NUMBERS
@@ -329,6 +374,20 @@ nav.visible { opacity: 1; }
 .impact-cell:last-child { border-right: none; }
 .impact-num { font-family: var(--font-headline); font-weight: 700; font-size: 52px; color: var(--plum); line-height: 1; margin-bottom: 10px; }
 .impact-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); }
+
+/* ════════════════════════════════
+   MEDIA PAGE
+════════════════════════════════ */
+.media-page { padding: 100px 56px; }
+.featured-video-wrap { position: relative; margin-bottom: 100px; }
+.featured-video { aspect-ratio: 16/9; background: var(--plum-deep); border: 1px solid var(--light-border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.featured-video::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.4) 100%); }
+.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin: 60px 0 100px; }
+.event-card { background: white; border: 1px solid var(--light-border); padding: 40px; transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1); cursor: pointer; }
+.event-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(74,25,66,0.08); border-color: var(--accent-border); }
+.event-date { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: block; }
+.event-title { font-family: var(--font-headline); font-size: 26px; color: var(--plum); margin-bottom: 12px; line-height: 1.2; }
+.event-desc { font-size: 15px; color: var(--mid); line-height: 1.7; font-weight: 300; }
 
 /* ════════════════════════════════
    BOARD PAGE
@@ -555,6 +614,11 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
   .impact-cell { border-right: none !important; border-bottom: 1px solid var(--light-border); padding: 48px 24px; text-align: center; }
   .impact-cell:last-child { border-bottom: none; }
 
+  .media-page { padding: 100px 24px 60px; }
+  .featured-video-wrap { margin-bottom: 60px; }
+  .media-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .media-thumb { aspect-ratio: 4/3 !important; }
+
   .project-row { grid-template-columns: 1fr !important; gap: 16px; padding: 32px 0; }
   .project-row::before { left: -24px; right: -24px; }
   .p-type { display: none; }
@@ -667,6 +731,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
     <span class="intro-eyebrow">Rooted in community. Built for the future.</span>
     <span class="intro-name">Marble Ceilings <em>For Good</em></span>
   </div>
+  <button class="skip-intro" id="skip-intro-btn" onclick="cancelAnimationFrame(animFrame); exitIntro();">Skip Intro</button>
 </div>
 
 <!-- ══════════════════════════════
@@ -682,7 +747,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
     <li><a href="#" onclick="showPage('home',this);toggleMobileMenu()" role="button">Our Work</a></li>
     <li><a href="#" onclick="showPage('about',this);toggleMobileMenu()" role="button">About</a></li>
     <li><a href="#" onclick="showPage('board',this);toggleMobileMenu()" role="button">Board</a></li>
-    <li><a href="#" onclick="showPage('home','#page-home-anchor');toggleMobileMenu()" role="button">Impact</a></li>
+    <li><a href="#" onclick="showPage('media',this);toggleMobileMenu()" role="button">Media</a></li>
   </ul>
   <a href="#" onclick="openWaitlist();return false;" class="nav-cta" role="button">Support Us</a>
   <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
@@ -762,12 +827,12 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
                     <span class="mosaic-project-tag">Live</span>
                   </div>
                   <div class="mosaic-project-item">
-                    <span class="mosaic-project-name">Seshat</span>
-                    <span class="mosaic-project-tag">Building</span>
+                    <span class="mosaic-project-name">Project Prodigy</span>
+                    <span class="mosaic-project-tag">Discovery</span>
                   </div>
                   <div class="mosaic-project-item">
-                    <span class="mosaic-project-name">Project Malcolm</span>
-                    <span class="mosaic-project-tag">Discovery</span>
+                    <span class="mosaic-project-name">Seshat</span>
+                    <span class="mosaic-project-tag">2027</span>
                   </div>
                 </div>
               </div>
@@ -833,14 +898,8 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
       </div>
       <div class="project-row reveal d1">
         <div class="p-num">02</div>
-        <div class="p-info"><div class="p-name">Seshat</div><div class="p-desc">A community research platform that turns lived experience into actionable data — closing the gap between people and the programs meant to help them.</div></div>
-        <div class="p-type">Research Platform</div>
-        <div class="p-status"><span class="status-pill s-build">In Development</span></div>
-      </div>
-      <div class="project-row reveal d2">
-        <div class="p-num">03</div>
         <div class="p-info">
-          <div class="p-name">Project Malcolm</div>
+          <div class="p-name">Project Prodigy</div>
           <div class="p-desc">Details of this project are currently private during the discovery phase.</div>
           <div style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:5px 12px;background:rgba(74,25,66,0.05);border:1px solid rgba(74,25,66,0.12);border-radius:3px;">
             <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="5" width="10" height="7" rx="1.5" stroke="#7A6B73" stroke-width="1.1"/><path d="M3.5 5V3.5a2.5 2.5 0 0 1 5 0V5" stroke="#7A6B73" stroke-width="1.1" stroke-linecap="round"/></svg>
@@ -849,6 +908,12 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
         </div>
         <div class="p-type">Health Tech</div>
         <div class="p-status"><span class="status-pill s-disc">Discovery</span></div>
+      </div>
+      <div class="project-row reveal d2">
+        <div class="p-num">03</div>
+        <div class="p-info"><div class="p-name">Seshat</div><div class="p-desc">A community research platform that turns lived experience into actionable data — closing the gap between people and the programs meant to help them.</div></div>
+        <div class="p-type">Research Platform</div>
+        <div class="p-status"><span class="status-pill s-build">2027</span></div>
       </div>
     </section>
 
@@ -926,12 +991,12 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
               <p>Provides up-to-date information for domestic violence victims (hotlines, emergency shelters, and other relevant resources).</p>
             </div>
             <div class="ecosystem-card">
-              <h4>Seshat</h4>
-              <p>Navigates through benefits systems for disadvantaged populations in South Carolina making the complex state and federal assistance programs more manageable.</p>
+              <h4>Project Prodigy</h4>
+              <p>Features a patient-facing portal for the Sickle Cell Anemia community to access important data about and guidance on managing the disease.</p>
             </div>
             <div class="ecosystem-card">
-              <h4>Project Malcolm</h4>
-              <p>Features a patient-facing portal for the Sickle Cell Anemia community to access important data about and guidance on managing the disease.</p>
+              <h4>Seshat</h4>
+              <p>Navigates through benefits systems for disadvantaged populations in South Carolina making the complex state and federal assistance programs more manageable.</p>
             </div>
           </div>
 
@@ -979,7 +1044,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
             </div>
             <div class="board-body">
               <div class="board-name">Bertram Leroy Moore III</div>
-              <div class="board-title">Founder · Executive Director · Director</div>
+              <div class="board-title">Founder | Executive Director</div>
               <p class="board-bio">Bertram is the founder and executive director of Marble Ceilings For Good, and the architect of the Bastet app. A technologist and community builder from the South Carolina Lowcountry, his work is rooted in the belief that the people closest to a problem are the ones best equipped to solve it — and that they deserve the same quality of tools as anyone else. He serves as the organization's registered agent and holds the primary operational and strategic vision for MCFG and all of its projects.</p>
             </div>
           </div>
@@ -998,7 +1063,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
           </div>
           <div class="board-body">
             <div class="board-name">Dr. Bertrina Lynn Scott</div>
-            <div class="board-title">Board Chair · Director</div>
+            <div class="board-title">Board Chair</div>
             <p class="board-bio">Dr. Scott holds a Ph.D. in Developmental Psychology, specializing in child and adolescent development. Her early experiences with serving children and their families has led to her lifelong support of efforts that improve their well-being. As Board Chair, she provides governance oversight and strategic direction — ensuring that MCFG's work remains grounded in both rigorous practice and community trust. She was among the first to believe in this organization's potential.</p>
           </div>
         </div>
@@ -1013,7 +1078,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
           </div>
           <div class="board-body">
             <div class="board-name">Yaunna Stewart</div>
-            <div class="board-title">Secretary · Director</div>
+            <div class="board-title">Secretary of the Board</div>
             <p class="board-bio">Yaunna Stewart is a committed nonprofit board member and passionate advocate for equity and community impact. A 2002 graduate of The Citadel she brings strong leadership and discipline to her service. As a Certified Occupational Therapy Assistant (COTA), she is dedicated to improving lives through compassionate care.</p>
             <p class="board-bio" style="margin-top: 12px;">Originally from Florence, South Carolina, Yaunna is a proud wife of 16 years and a devoted boy mom. Her life experiences fuel her advocacy for women’s rights—especially protection, safety, and ensuring every woman has a voice. She stands firmly for justice, empowerment, and meaningful change.</p>
           </div>
@@ -1068,6 +1133,96 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
       </div>
     </section>
   </div><!-- /page-board -->
+
+  <!-- ══ MEDIA PAGE ══ -->
+  <div id="page-media" class="page-section">
+    <section class="media-page">
+      <div class="section-eyebrow reveal">Documenting the Journey</div>
+      <h2 class="section-heading reveal d1">Voices of <em>Impact.</em></h2>
+
+      <!-- FEATURED VIDEO WIREFRAME -->
+      <div class="featured-video-wrap reveal d2">
+        <div class="featured-video">
+          <div class="board-monogram" style="font-size: 200px; opacity: 0.03;">MCFG</div>
+          <div class="media-play-btn" style="width: 100px; height: 100px;">
+            <svg width="40" height="40" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div style="position: absolute; bottom: 40px; left: 40px; z-index: 5; text-align: left;">
+            <span class="media-tag" style="color: white; opacity: 0.7;">Featured Feature</span>
+            <h3 style="font-family: var(--font-headline); font-size: 42px; color: white; margin-top: 8px;">Technological Empathy: The Documentary</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVENTS WIREFRAME -->
+      <div class="section-eyebrow reveal">Upcoming Events</div>
+      <h2 class="section-heading reveal d1">Join the <em>community.</em></h2>
+      
+      <div class="events-grid">
+        <div class="event-card reveal">
+          <span class="event-date">June 14, 2026 · Charleston, SC</span>
+          <h3 class="event-title">Lowcountry Tech Summit</h3>
+          <p class="event-desc">Join us as we showcase the first stable build of Bastet and discuss the future of community-led innovation in the region.</p>
+        </div>
+        <div class="event-card reveal d1">
+          <span class="event-date">July 22, 2026 · Virtual</span>
+          <h3 class="event-title">Building with Bastet: Workshop</h3>
+          <p class="event-desc">A deep dive into the architecture of our resource locator, focused on privacy-first design for vulnerable populations.</p>
+        </div>
+        <div class="event-card reveal d2">
+          <span class="event-date">August 05, 2026 · Berkeley County</span>
+          <h3 class="event-title">MCFG Lab Open House</h3>
+          <p class="event-desc">Meet the board, see our current discovery projects, and learn how you can contribute to our mission.</p>
+        </div>
+      </div>
+
+      <!-- LAB LEDGER (Original Media Cards) -->
+      <div class="section-eyebrow reveal">The Lab Ledger</div>
+      <h2 class="section-heading reveal d1">Publications & <em>Insights.</em></h2>
+      
+      <div class="media-grid">
+        <div class="media-card reveal">
+          <div class="media-thumb">
+            <div class="board-monogram" style="color:rgba(255,255,255,0.05); font-size: 140px;">01</div>
+            <div class="media-play-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="media-info">
+            <span class="media-tag">Video · Intro</span>
+            <h3 class="media-title">The MCFG Vision</h3>
+            <p class="media-desc">Executive Director Bertram Moore III discusses the roots of Marble Ceilings For Good and why we start with community.</p>
+          </div>
+        </div>
+        <div class="media-card reveal d1">
+          <div class="media-thumb" style="background: var(--plum-mid);">
+            <div class="board-monogram" style="color:rgba(255,255,255,0.05); font-size: 140px;">02</div>
+            <div class="media-play-btn">
+              <svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="media-info">
+            <span class="media-tag">Video · Impact</span>
+            <h3 class="media-title">Bastet: Safety by Design</h3>
+            <p class="media-desc">A deep dive into how we built our mobile resource locator alongside survivors in the Lowcountry.</p>
+          </div>
+        </div>
+        <div class="media-card reveal d2">
+          <div class="media-thumb" style="background: var(--accent);">
+            <div class="board-monogram" style="color:rgba(255,255,255,0.05); font-size: 140px;">WP</div>
+            <div class="media-play-btn" style="background: var(--plum); border-color: var(--plum);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+          </div>
+          <div class="media-info">
+            <span class="media-tag">White Paper · Research</span>
+            <h3 class="media-title">Closing the Care Gap</h3>
+            <p class="media-desc">Our latest research on using technology to bridge the divide between vulnerable populations and state resources.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
   </main>
 
   <footer>
@@ -1075,7 +1230,7 @@ footer { background: var(--plum-deep); padding: 56px; display: flex; justify-con
       <div class="footer-brand">Marble Ceilings For Good</div>
       <div class="footer-sub">Berkeley County, South Carolina <span class="footer-gold-dot"></span> 501(c)(3) In Formation</div>
     </div>
-    <div class="footer-right">Bastet <span class="footer-gold-dot"></span> Seshat <span class="footer-gold-dot"></span> Project Malcolm<br>&copy; 2026 Marble Ceilings For Good</div>
+    <div class="footer-right">Bastet <span class="footer-gold-dot"></span> Project Prodigy <span class="footer-gold-dot"></span> Seshat<br>&copy; 2026 Marble Ceilings For Good</div>
   </footer>
 
 </div><!-- /site -->
@@ -1407,7 +1562,8 @@ requestAnimationFrame(animate);
 ══════════════════════════════════════════ */
 function showPage(id, el) {
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
+  const targetPage = document.getElementById('page-' + id);
+  if (targetPage) targetPage.classList.add('active');
 
   // Match nav link
   document.querySelectorAll('.nav-links a').forEach(a => {
@@ -1416,9 +1572,19 @@ function showPage(id, el) {
     if (id === 'home' && linkText === 'our work') a.classList.add('active');
     if (id === 'about' && linkText === 'about') a.classList.add('active');
     if (id === 'board' && linkText === 'board') a.classList.add('active');
+    if (id === 'media' && linkText === 'media') a.classList.add('active');
   });
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (typeof el === 'string' && el.startsWith('#')) {
+    setTimeout(() => {
+      const anchor = document.querySelector(el);
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 50);
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
   initReveal();
 }
 
