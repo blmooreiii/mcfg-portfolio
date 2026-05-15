@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bastet · Marble Ceilings For Good</title>
+<link rel="stylesheet" href="https://use.typekit.net/olk5una.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Source+Serif+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap">
+<link rel="stylesheet" href="https://use.typekit.net/olk5una.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --plum: #4A1841;
+  --plum-deep: #33102d;
+  --plum-mid: #601f54;
+  --accent: #1E95B2;
+  --accent-light: #48ADC4;
+  --accent-pale: #D6E8F0;
+  --cream: #FAF7F2;
+  --sand: #F0EBE1;
+  --ink: #140E12;
+  --mid: #4A3F45;
+  --mute: #7a706b;
+  --line: rgba(97,64,81,0.12);
+  --line-strong: rgba(20,14,18,0.18);
+  --ff-display: "freightdispcmp-pro", "Playfair Display", Georgia, serif;
+  --ff-body: "sirenne-eighteen-mvb", "Source Serif Pro", Georgia, serif;
+  --ff-ui: "Inter", system-ui, -apple-system, sans-serif;
+}
+html, body { background: var(--cream); }
+body { color: var(--ink); font-family: var(--ff-body); line-height: 1.6; font-size: 16px; }
+.lc { background: var(--cream); font-family: var(--ff-body); max-width: 1440px; margin: 0 auto; }
+.lc p { margin: 0; }
+.lc h1, .lc h2, .lc h3, .lc h4 { margin: 0; font-weight: 400; }
+.eyebrow { font-family: var(--ff-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); display: inline-flex; align-items: center; gap: 12px; }
+.eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+
+/* Cinematic hero */
+.lc-hero { background: linear-gradient(180deg, #170D11 0%, #1c1217 60%, #221820 100%); color: var(--cream); padding: 72px 72px; position: relative; overflow: hidden; }
+.lc-hero::before { content: ''; position: absolute; top: -10%; right: -5%; width: 60%; height: 120%; background: radial-gradient(circle, rgba(30,149,178,0.18) 0%, transparent 65%); pointer-events: none; }
+.lc-hero::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 64px 64px; pointer-events: none; }
+.lc-hero-inner { position: relative; z-index: 1; }
+.lc-hero .meta { display: flex; justify-content: space-between; align-items: center; font-family: var(--ff-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(250,247,242,0.55); margin-bottom: 56px; padding-bottom: 20px; border-bottom: 1px solid rgba(250,247,242,0.1); }
+.lc-hero .meta .left { display: flex; align-items: center; gap: 16px; color: var(--accent-light); }
+.lc-hero .meta .left::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
+.lc-hero .meta .right { color: rgba(250,247,242,0.45); }
+.lc-hero-grid { display: grid; grid-template-columns: 1fr 380px; gap: 64px; align-items: end; }
+.lc-hero h1 { font-family: var(--ff-display); font-size: 92px; line-height: 0.95; letter-spacing: -0.025em; color: var(--cream); }
+.lc-hero h1 em { font-style: italic; color: var(--accent-light); background: linear-gradient(90deg, var(--accent-light), #c9d8de); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.lc-hero h1 .stroke { -webkit-text-stroke: 1px rgba(250,247,242,0.3); -webkit-text-fill-color: transparent; font-style: italic; }
+.lc-hero .deck { font-family: var(--ff-display); font-style: italic; font-size: 22px; line-height: 1.5; color: rgba(250,247,242,0.7); margin-bottom: 24px; }
+.lc-hero .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding-top: 24px; border-top: 1px solid rgba(250,247,242,0.1); }
+.lc-hero .stat-row .v { font-family: var(--ff-display); font-size: 36px; color: var(--accent-light); line-height: 1; margin-bottom: 8px; }
+.lc-hero .stat-row .k { font-family: var(--ff-ui); font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(250,247,242,0.55); line-height: 1.3; }
+.lc-hero .badge-row { margin-top: 32px; display: flex; gap: 10px; flex-wrap: wrap; }
+.lc-hero .badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(250,247,242,0.18); background: rgba(250,247,242,0.04); font-family: var(--ff-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(250,247,242,0.85); }
+.lc-hero .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-light); }
+.lc-hero .badge.live { border-color: rgba(30,149,178,0.5); color: var(--accent-light); background: rgba(30,149,178,0.08); }
+
+/* TOC */
+.lc-toc { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--sand); border-top: 1px solid var(--line-strong); border-bottom: 1px solid var(--line); }
+.lc-toc-item { padding: 28px 32px; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 6px; cursor: pointer; transition: background 0.2s; text-decoration: none; }
+.lc-toc-item:last-child { border-right: none; }
+.lc-toc-item:hover { background: white; }
+.lc-toc-item .num { font-family: var(--ff-display); font-style: italic; font-size: 14px; color: var(--accent); letter-spacing: 0.04em; }
+.lc-toc-item .ttl { font-family: var(--ff-display); font-size: 21px; color: var(--plum); line-height: 1.2; }
+.lc-toc-item .desc { font-family: var(--ff-ui); font-size: 11px; color: var(--mute); margin-top: 4px; line-height: 1.4; }
+
+/* Chapters */
+.lc-chapter { padding: 96px 72px; position: relative; }
+.lc-chapter + .lc-chapter { border-top: 1px solid var(--line); }
+.lc-chapter.alt { background: var(--sand); }
+.lc-chapter.dark { background: var(--plum-deep); color: var(--cream); }
+.lc-chapter-head { display: grid; grid-template-columns: 200px 1fr; gap: 64px; margin-bottom: 48px; align-items: start; }
+.lc-chapter-head .num { font-family: var(--ff-display); font-size: 110px; font-style: italic; line-height: 0.9; color: var(--accent); opacity: 0.9; }
+.lc-chapter.dark .lc-chapter-head .num { color: var(--accent-light); opacity: 0.7; }
+.lc-chapter-head .meta .eyebrow { margin-bottom: 14px; }
+.lc-chapter-head h2 { font-family: var(--ff-display); font-size: 56px; line-height: 1.05; letter-spacing: -0.015em; color: var(--plum); margin-bottom: 18px; }
+.lc-chapter.dark .lc-chapter-head h2 { color: var(--cream); }
+.lc-chapter.dark .lc-chapter-head h2 em { color: var(--accent-light); font-style: italic; }
+.lc-chapter-head h2 em { font-style: italic; color: var(--accent); }
+.lc-chapter-head .deck { font-family: var(--ff-display); font-style: italic; font-size: 22px; line-height: 1.5; color: var(--mid); max-width: 720px; }
+.lc-chapter.dark .lc-chapter-head .deck { color: rgba(250,247,242,0.7); }
+
+.lc-c1-body { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+.lc-c1-body p { font-size: 19px; line-height: 1.75; color: var(--mid); font-weight: 300; }
+.lc-c1-body p + p { margin-top: 18px; }
+.lc-c1-body p strong { color: var(--ink); font-weight: 600; }
+.lc-c1-quote { background: var(--plum); color: var(--cream); padding: 44px 44px; position: relative; }
+.lc-c1-quote::before { content: '"'; font-family: var(--ff-display); font-style: italic; font-size: 100px; line-height: 0.6; color: var(--accent); opacity: 0.5; position: absolute; top: 28px; left: 32px; }
+.lc-c1-quote p { font-family: var(--ff-display); font-style: italic; font-size: 26px; line-height: 1.4; color: var(--cream); margin-top: 56px; }
+.lc-c1-quote p em { color: var(--accent-light); }
+.lc-c1-quote .attr { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(250,247,242,0.15); font-family: var(--ff-ui); font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-light); }
+
+.lc-prin { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); background: white; }
+.lc-prin .p { padding: 36px 32px 40px; border-right: 1px solid var(--line); position: relative; display: flex; flex-direction: column; }
+.lc-prin .p:last-child { border-right: none; }
+.lc-prin .p::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--accent); }
+.lc-prin .num { font-family: var(--ff-display); font-style: italic; font-size: 14px; color: var(--accent); margin-bottom: 28px; letter-spacing: 0.04em; }
+.lc-prin h4 { font-family: var(--ff-display); font-size: 26px; line-height: 1.15; color: var(--plum); margin-bottom: 14px; }
+.lc-prin p { font-size: 15px; line-height: 1.65; color: var(--mid); font-weight: 300; }
+
+.lc-diff { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 40px; background: var(--cream); border: 1px solid var(--line); }
+.lc-diff .item { padding: 24px 22px; border-right: 1px solid var(--line); }
+.lc-diff .item:last-child { border-right: none; }
+.lc-diff .item .v { font-family: var(--ff-display); font-size: 22px; color: var(--plum); line-height: 1.2; margin-bottom: 6px; }
+.lc-diff .item .v em { font-style: italic; color: var(--accent); }
+.lc-diff .item .k { font-family: var(--ff-ui); font-size: 11px; color: var(--mid); font-weight: 400; line-height: 1.5; }
+
+.lc-stepper { display: grid; grid-template-columns: 1fr; }
+.lc-step-bar { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; padding-bottom: 32px; }
+.lc-step-bar::before { content: ''; position: absolute; top: 14px; left: 12.5%; right: 12.5%; height: 2px; background: var(--accent-light); opacity: 0.4; }
+.lc-step-pip { text-align: center; position: relative; }
+.lc-step-pip .pip { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); margin: 0 auto; display: grid; place-items: center; position: relative; z-index: 1; border: 4px solid var(--cream); box-shadow: 0 0 0 1px var(--accent); }
+.lc-step-pip .pip::after { content: '✓'; font-family: var(--ff-ui); font-size: 11px; color: white; font-weight: 800; }
+.lc-step-pip .lab { margin-top: 14px; font-family: var(--ff-ui); font-size: 9px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent); }
+.lc-step-pip .ttl { margin-top: 6px; font-family: var(--ff-display); font-size: 22px; line-height: 1.15; color: var(--plum); }
+.lc-step-pip .sub { margin-top: 6px; font-family: var(--ff-display); font-style: italic; font-size: 13px; color: var(--mute); padding: 0 16px; }
+.lc-step-cards { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); background: white; }
+.lc-step-cards .card { padding: 28px 24px; border-right: 1px solid var(--line); }
+.lc-step-cards .card:last-child { border-right: none; }
+.lc-step-cards ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.lc-step-cards li { display: grid; grid-template-columns: 14px 1fr; gap: 8px; font-family: var(--ff-ui); font-size: 13px; line-height: 1.55; color: var(--mid); font-weight: 400; }
+.lc-step-cards li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-top: 8px; }
+
+.lc-status { display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(250,247,242,0.03); border: 1px solid rgba(250,247,242,0.08); }
+.lc-status .col { padding: 36px 32px; border-right: 1px solid rgba(250,247,242,0.08); }
+.lc-status .col:last-child { border-right: none; }
+.lc-status .col h4 { font-family: var(--ff-ui); font-size: 10px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--accent-light); margin-bottom: 20px; }
+.lc-status .col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.lc-status .col li { font-family: var(--ff-ui); font-size: 14px; line-height: 1.6; color: rgba(250,247,242,0.78); padding-left: 16px; position: relative; }
+.lc-status .col li::before { content: ''; position: absolute; left: 0; top: 11px; width: 8px; height: 1px; background: var(--accent-light); }
+.lc-status .col li strong { color: var(--cream); font-weight: 600; }
+
+.lc-close { padding: 80px 72px; background: var(--accent); color: var(--plum-deep); display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 48px; }
+.lc-close h3 { font-family: var(--ff-display); font-size: 44px; line-height: 1.1; color: var(--plum-deep); letter-spacing: -0.01em; }
+.lc-close h3 em { font-style: italic; }
+.lc-close .row { display: flex; gap: 12px; }
+.lc-close .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: var(--plum-deep); color: var(--cream); font-family: var(--ff-ui); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; }
+.lc-close .btn.ghost { background: transparent; color: var(--plum-deep); border: 1.5px solid var(--plum-deep); }
+
+@media (max-width: 900px) {
+  .lc-hero { padding: 48px 28px; }
+  .lc-hero h1 { font-size: 52px; }
+  .lc-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .lc-toc { grid-template-columns: 1fr 1fr; }
+  .lc-toc-item { border-bottom: 1px solid var(--line); }
+  .lc-chapter { padding: 56px 28px; }
+  .lc-chapter-head { grid-template-columns: 1fr; gap: 16px; }
+  .lc-chapter-head .num { font-size: 72px; }
+  .lc-chapter-head h2 { font-size: 36px; }
+  .lc-c1-body { grid-template-columns: 1fr; gap: 32px; }
+  .lc-prin, .lc-step-cards, .lc-step-bar { grid-template-columns: 1fr 1fr; }
+  .lc-prin .p, .lc-step-cards .card { border-bottom: 1px solid var(--line); }
+  .lc-diff { grid-template-columns: 1fr 1fr; }
+  .lc-diff .item { border-bottom: 1px solid var(--line); }
+  .lc-status { grid-template-columns: 1fr; }
+  .lc-close { grid-template-columns: 1fr; padding: 56px 28px; }
+}
+
+/* NAVIGATION CONSISTENCY */
+#main-nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  width: 100%; max-width: 1264px; margin: 0 auto; z-index: 1001;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 56px;
+  background: rgba(250,247,242,0.94);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(74,24,65,0.12);
+}
+.nav-logo { display: flex; align-items: center; gap: 18px; text-decoration: none; }
+.nav-logo-mark {
+  width: 44px; height: 44px; background: var(--plum);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-mark span { font-family: var(--ff-display); font-weight: 700; font-size: 24px; color: var(--accent); font-style: italic; }
+.nav-wordmark { font-family: var(--ff-display); font-weight: 700; font-size: 19px; letter-spacing: 0.04em; color: var(--plum); }
+.nav-links { display: flex; gap: 48px; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--plum); }
+.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; padding: 11px 26px; background: var(--plum); color: var(--cream); text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.nav-cta:hover { background: var(--plum-deep); transform: translateY(-1px); }
+
+.nav-toggle {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  width: 24px; height: 18px;
+  position: relative; z-index: 1001;
+}
+.nav-toggle span {
+  display: block; width: 100%; height: 2px;
+  background: var(--plum);
+  position: absolute; left: 0;
+  transition: transform 0.3s, top 0.3s, opacity 0.3s;
+}
+.nav-toggle span:first-child { top: 0; }
+.nav-toggle span:last-child { top: 16px; }
+.nav-toggle.active span:first-child { top: 8px; transform: rotate(45deg); }
+.nav-toggle.active span:last-child { top: 8px; transform: rotate(-45deg); }
+
+.nav-overlay {
+  position: fixed; inset: 0; background: rgba(11, 6, 9, 0.45);
+  z-index: 999; opacity: 0; pointer-events: none; transition: opacity 0.4s;
+}
+.nav-overlay.active { opacity: 1; pointer-events: auto; }
+
+@media (max-width: 1024px) {
+  #main-nav { padding: 18px 24px; }
+  .nav-links {
+    position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
+    display: flex; flex-direction: column; align-items: flex-start; 
+    justify-content: flex-start; padding: 120px 40px;
+    gap: 32px; z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+    background: rgba(250, 247, 242, 0.98);
+    backdrop-filter: blur(24px);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+  }
+  .nav-links.active { transform: translateX(0); }
+  .nav-toggle { display: block; }
+  .nav-cta { display: none; }
+}
+
+.lc-hero { padding-top: 120px; }
+
+/* Gallery Carousel - 3D Cover Flow */
+.lc-gallery { padding: 100px 0; background: var(--plum-deep); overflow: hidden; position: relative; perspective: 1200px; }
+.lc-gallery-track { 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  height: 680px; 
+  position: relative; 
+  transform-style: preserve-3d;
+}
+.lc-gallery-item { 
+  position: absolute;
+  width: 280px; 
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.lc-gallery-item img { 
+  width: 100%; 
+  height: auto; 
+  border-radius: 20px; 
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
+  border: 1px solid rgba(255,255,255,0.1); 
+}
+.lc-gallery-item .label { 
+  margin-top: 24px; 
+  text-align: center; 
+  color: var(--cream); 
+  font-family: var(--ff-ui); 
+  font-size: 11px; 
+  font-weight: 600; 
+  letter-spacing: 0.15em; 
+  text-transform: uppercase; 
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+/* States */
+.lc-gallery-item.active { opacity: 1; pointer-events: auto; z-index: 10; transform: translate3d(0, 0, 0) rotateY(0deg); }
+.lc-gallery-item.active .label { opacity: 1; }
+.lc-gallery-item.prev { opacity: 0.6; transform: translate3d(-260px, 0, -300px) rotateY(35deg); z-index: 5; }
+.lc-gallery-item.next { opacity: 0.6; transform: translate3d(260px, 0, -300px) rotateY(-35deg); z-index: 5; }
+.lc-gallery-item.far-prev { opacity: 0; transform: translate3d(-500px, 0, -500px) rotateY(45deg); }
+.lc-gallery-item.far-next { opacity: 0; transform: translate3d(500px, 0, -500px) rotateY(-45deg); }
+
+.lc-gallery-controls { display: flex; justify-content: center; gap: 20px; margin-top: 60px; position: relative; z-index: 20; }
+.lc-gallery-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(250,247,242,0.2); background: transparent; color: var(--cream); cursor: pointer; display: grid; place-items: center; transition: all 0.3s; }
+.lc-gallery-btn:hover { background: var(--accent); border-color: var(--accent); }
+.lc-gallery-btn.disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<div class="nav-overlay" id="nav-overlay" onclick="toggleMobileMenu()"></div>
+<nav id="main-nav">
+  <a href="mcfg-corrected_6.html" class="nav-logo">
+    <div class="nav-logo-mark"><span>M</span></div>
+    <span class="nav-wordmark">Marble Ceilings For Good</span>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="mcfg-corrected_6.html#home">Our Work</a></li>
+    <li><a href="mcfg-corrected_6.html#about">About</a></li>
+    <li><a href="mcfg-corrected_6.html#board">Board</a></li>
+    <li><a href="mcfg-corrected_6.html#media">Media</a></li>
+  </ul>
+  <a href="mcfg-corrected_6.html" class="nav-cta">Back to HQ</a>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleMobileMenu()">
+    <span></span><span></span>
+  </button>
+</nav>
+
+<div class="lc">
+  <header class="lc-hero">
+    <div class="lc-hero-inner">
+      <div class="meta">
+        <span class="left">Digital Product · Lowcountry Innovation</span>
+        <span class="right">MMXXVI · Berkeley County, SC</span>
+      </div>
+      <div class="lc-hero-grid">
+        <div>
+          <h1>
+            <span>Bastet.</span><br>
+            <em>Quiet protection,</em><br>
+            <span class="stroke">not crisis branding.</span>
+          </h1>
+          <div class="badge-row">
+            <span class="badge live"><span class="dot"></span>Live · Beta</span>
+            <span class="badge">iOS &amp; Android</span>
+            <span class="badge">React Native / Expo</span>
+            <span class="badge">South Carolina · v1</span>
+            <span class="badge">501(c)(3) Pending</span>
+          </div>
+        </div>
+        <aside>
+          <p class="deck">A discreet mobile resource locator that lets domestic violence survivors find verified shelter and support in seconds — and walk away with no trace.</p>
+          <div class="stat-row">
+            <div><div class="v">22</div><div class="k">Verified SC<br>shelters</div></div>
+            <div><div class="v">120<span style="font-size:18px">ms</span></div><div class="k">Quick Exit<br>response time</div></div>
+            <div><div class="v">0</div><div class="k">Trackers, SDKs,<br>or analytics</div></div>
+            <div><div class="v">AA</div><div class="k">WCAG audit<br>across all screens</div></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <nav class="lc-toc">
+    <a class="lc-toc-item" href="#ch1"><div class="num">i.</div><div class="ttl">The Problem</div><div class="desc">Why existing tools fail in the moment that matters.</div></a>
+    <a class="lc-toc-item" href="#ch2"><div class="num">ii.</div><div class="ttl">Principles &amp; Posture</div><div class="desc">Four commitments that shaped every decision.</div></a>
+    <a class="lc-toc-item" href="#ch3"><div class="num">iii.</div><div class="ttl">Process &amp; Milestones</div><div class="desc">Four shipped milestones. Each closed before the next began.</div></a>
+    <a class="lc-toc-item" href="#ch4"><div class="num">iv.</div><div class="ttl">Where Things Stand</div><div class="desc">Beta. Production-ready. Awaiting submission.</div></a>
+  </nav>
+
+  <section class="lc-gallery">
+    <div class="lc-gallery-track" id="gallery-track">
+      <div class="lc-gallery-item">
+        <img src="IMG_0842.jpg" alt="Bastet Home Screen">
+        <div class="label">01 · Welcome & Affirmation</div>
+      </div>
+      <div class="lc-gallery-item">
+        <img src="IMG_0843.jpg" alt="Bastet Shelter Search Results">
+        <div class="label">02 · Verified Shelter Search</div>
+      </div>
+      <div class="lc-gallery-item">
+        <img src="IMG_0844.jpg" alt="Bastet Support Hotlines">
+        <div class="label">03 · 24/7 Support & Hotlines</div>
+      </div>
+      <div class="lc-gallery-item">
+        <img src="IMG_0845.jpg" alt="BastBot FAQ Interface">
+        <div class="label">04 · BastBot: Automated Guidance</div>
+      </div>
+    </div>
+    <div class="lc-gallery-controls">
+      <button class="lc-gallery-btn" id="prev-btn" onclick="moveGallery(-1)">←</button>
+      <button class="lc-gallery-btn" id="next-btn" onclick="moveGallery(1)">→</button>
+    </div>
+  </section>
+
+  <section class="lc-chapter" id="ch1">
+    <header class="lc-chapter-head">
+      <div class="num">i.</div>
+      <div class="meta">
+        <span class="eyebrow">The Problem</span>
+        <h2>Survivors need help in <em>seconds.</em><br>Existing tools take minutes.</h2>
+        <p class="deck">In a moment of crisis, the difference between a shelter found and a chance lost can be a single screen. Today's apps add too many.</p>
+      </div>
+    </header>
+    <div class="lc-c1-body">
+      <div>
+        <p>Domestic violence survivors in crisis need immediate access to shelter and support. <strong>Existing tools are too complex to navigate under stress, require account creation, or leave identifiable traces on shared and monitored devices.</strong></p>
+        <p>The brief was clear: build something that works in seconds, leaves no trace, and feels nothing like a traditional help app.</p>
+        <p>Every conversation with advocates pointed back to the same constraint — privacy is not a feature you add late. It's the only frame the product can be designed inside.</p>
+      </div>
+      <blockquote class="lc-c1-quote">
+        <p>Victims need a way to find safe shelters and support resources <em>immediately</em>, without exposing themselves to risk or navigating complex existing systems.</p>
+        <div class="attr">— Project Brief</div>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="lc-chapter alt" id="ch2">
+    <header class="lc-chapter-head">
+      <div class="num">ii.</div>
+      <div class="meta">
+        <span class="eyebrow">Principles &amp; Posture</span>
+        <h2>Four commitments,<br><em>locked at the outset.</em></h2>
+        <p class="deck">Each principle is a veto. If a feature breaks one, the feature does not ship — full stop.</p>
+      </div>
+    </header>
+    <div class="lc-prin">
+      <div class="p"><span class="num">— i. —</span><h4>Trust Is the Product</h4><p>Every decision evaluated against whether it builds or breaks user trust. Nothing else compounds without it.</p></div>
+      <div class="p"><span class="num">— ii. —</span><h4>Privacy Is Table Stakes</h4><p>No account, no history, no stored location, no trace. The default is silence.</p></div>
+      <div class="p"><span class="num">— iii. —</span><h4>Discretion Over Visibility</h4><p>App icon designed to pass as a casual game on a home screen. Disguise is a safety feature.</p></div>
+      <div class="p"><span class="num">— iv. —</span><h4>Navigation Tool Only</h4><p>No chat, no push notifications, no community features. Find what's needed, then leave.</p></div>
+    </div>
+    <div class="lc-diff">
+      <div class="item"><div class="v"><em>0</em> accounts</div><div class="k">No login, no email, no stored identity</div></div>
+      <div class="item"><div class="v">On-device <em>only</em></div><div class="k">Location used once, never transmitted</div></div>
+      <div class="item"><div class="v"><em>120ms</em> exit</div><div class="k">Closes &amp; clears recents → weather.com</div></div>
+      <div class="item"><div class="v"><em>16-bit</em> icon</div><div class="k">Pixel Bastet mark — passes as a game</div></div>
+      <div class="item"><div class="v">22 shelters</div><div class="k">Verified SC, callForAddress where confidential</div></div>
+    </div>
+  </section>
+
+  <section class="lc-chapter" id="ch3">
+    <header class="lc-chapter-head">
+      <div class="num">iii.</div>
+      <div class="meta">
+        <span class="eyebrow">Process &amp; Milestones</span>
+        <h2>Four milestones.<br><em>Each closed</em> before the next began.</h2>
+        <p class="deck">No features shipped without the safety baseline in place. Every milestone had defined scope and completion criteria.</p>
+      </div>
+    </header>
+    <div class="lc-stepper">
+      <div class="lc-step-bar">
+        <div class="lc-step-pip"><div class="pip"></div><div class="lab">Milestone 1</div><div class="ttl">Safety Baseline</div><div class="sub">The non-negotiables.</div></div>
+        <div class="lc-step-pip"><div class="pip"></div><div class="lab">Milestone 2</div><div class="ttl">Data Hardening</div><div class="sub">Real verified data.</div></div>
+        <div class="lc-step-pip"><div class="pip"></div><div class="lab">Milestone 3</div><div class="ttl">UX Design System</div><div class="sub">Visual identity locked.</div></div>
+        <div class="lc-step-pip"><div class="pip"></div><div class="lab">Milestone 4</div><div class="ttl">Polish &amp; A11y</div><div class="sub">Both platforms. All users.</div></div>
+      </div>
+      <div class="lc-step-cards">
+        <div class="card"><ul>
+          <li>Quick Exit clears recents → weather.com</li>
+          <li>Privacy cover screen on background</li>
+          <li>Location rationale &amp; graceful denial</li>
+          <li>No account, no login, no identity</li>
+        </ul></div>
+        <div class="card"><ul>
+          <li>Schema v2.1 — 22 verified SC shelters</li>
+          <li>callForAddress for confidential entries</li>
+          <li>Runtime schema validator on startup</li>
+          <li>Haversine — deterministic, no NaN</li>
+          <li>GPS timeout / denied / off handling</li>
+        </ul></div>
+        <div class="card"><ul>
+          <li>theme.ts tokens — color, type, spacing</li>
+          <li>Playfair Display + DM Sans pairing</li>
+          <li>Eggplant (#614051) primary throughout</li>
+          <li>4 UI directions explored, one shipped</li>
+          <li>Hero copy: "We believe you."</li>
+        </ul></div>
+        <div class="card"><ul>
+          <li>WCAG AA — 5 issues resolved</li>
+          <li>Onboarding + Quick Exit tutorial</li>
+          <li>Android MaterialIcons swap</li>
+          <li>Settings: replay, privacy, version</li>
+          <li>SafeAreaView API 30 + 36 — passing</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lc-chapter dark" id="ch4">
+    <header class="lc-chapter-head">
+      <div class="num">iv.</div>
+      <div class="meta">
+        <span class="eyebrow">Where Things Stand</span>
+        <h2>Beta.<br><em>Production-ready.</em></h2>
+        <p class="deck">All four milestones complete. App Store submission pending beta feedback and icon asset delivery.</p>
+      </div>
+    </header>
+    <div class="lc-status">
+      <div class="col"><h4>Technical</h4><ul>
+        <li><strong>React Native / Expo</strong> — cross-platform iOS &amp; Android</li>
+        <li><strong>Zero</strong> third-party analytics, tracking SDKs, or ad libraries</li>
+        <li>22 schema-validated SC shelter entries on every launch</li>
+        <li>WCAG AA across all four screens</li>
+        <li>Quick Exit verified across every state &amp; interaction</li>
+      </ul></div>
+      <div class="col"><h4>Product</h4><ul>
+        <li><strong>4 design principles</strong> reflected on every screen</li>
+        <li>Onboarding educates on privacy + Quick Exit, friction-free</li>
+        <li><strong>callForAddress</strong> protects confidential locations</li>
+        <li>Beta plan filed — Tier 1 pipeline (3 advocates + 2 contacts)</li>
+      </ul></div>
+      <div class="col"><h4>What's Next</h4><ul>
+        <li><strong>Beta:</strong> Tier 1 advocate outreach in progress</li>
+        <li><strong>Submission:</strong> pending beta feedback &amp; icon delivery</li>
+        <li><strong>v2.0+:</strong> national expansion via API layer</li>
+        <li>thehotline.org / 211.org integration on roadmap</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="lc-close">
+    <h3>Want to read other case studies, or<br><em>support the work?</em></h3>
+    <div class="row">
+      <a href="mcfg-corrected_6.html" class="btn">Back to Projects →</a>
+      <a href="#" class="btn ghost">Support Us</a>
+    </div>
+  </section>
+</div>
+
+<script>
+let currentIdx = 0;
+const items = document.querySelectorAll('.lc-gallery-item');
+
+function moveGallery(dir) {
+  currentIdx = (currentIdx + dir + items.length) % items.length;
+  
+  items.forEach((item, i) => {
+    item.className = 'lc-gallery-item';
+    if (i === currentIdx) {
+      item.classList.add('active');
+    } else if (i === (currentIdx - 1 + items.length) % items.length) {
+      item.classList.add('prev');
+    } else if (i === (currentIdx + 1) % items.length) {
+      item.classList.add('next');
+    } else if (i < currentIdx) {
+      item.classList.add('far-prev');
+    } else {
+      item.classList.add('far-next');
+    }
+  });
+}
+function toggleMobileMenu() {
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.getElementById('nav-links');
+  const overlay = document.getElementById('nav-overlay');
+  toggle.classList.toggle('active');
+  links.classList.toggle('active');
+  overlay.classList.toggle('active');
+}
+
+moveGallery(0);
+</script>
+
+</body>
+</html>

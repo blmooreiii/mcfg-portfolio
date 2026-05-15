@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bastet: Issue #1 — The Digital Shield</title>
+    <link rel="stylesheet" href="https://use.typekit.net/olk5una.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --plum: #4A1841;
+            --gold: #C9A84C;
+            --accent: #1E95B2;
+            --paper: #FAF7F2;
+            --ink: #140E12;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #1a1a1a;
+            background-image: radial-gradient(rgba(201,168,76,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            font-family: 'Comic Neue', cursive;
+            color: var(--ink);
+            padding: 40px 20px;
+            line-height: 1.4;
+        }
+
+        .comic-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--paper);
+            padding: 40px;
+            box-shadow: 20px 20px 0px var(--plum);
+            border: 4px solid var(--ink);
+            position: relative;
+        }
+
+        /* Halftone overlay */
+        .comic-container::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: radial-gradient(var(--ink) 1px, transparent 0);
+            background-size: 4px 4px;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+
+        header {
+            border-bottom: 4px solid var(--ink);
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 20px;
+        }
+
+        .logo-box {
+            background: var(--plum);
+            color: white;
+            padding: 10px 20px;
+            border: 3px solid var(--ink);
+            transform: rotate(-2deg);
+        }
+
+        .logo-box h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 64px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 4px 4px var(--gold);
+        }
+
+        .issue-info {
+            text-align: right;
+            font-family: 'Bangers', cursive;
+            font-size: 24px;
+            color: var(--plum);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-auto-rows: minmax(200px, auto);
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border: 4px solid var(--ink);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel:hover {
+            transform: scale(1.02);
+            z-index: 10;
+            box-shadow: 10px 10px 0px var(--gold);
+        }
+
+        .panel-1 { grid-column: span 8; grid-row: span 2; }
+        .panel-2 { grid-column: span 4; }
+        .panel-3 { grid-column: span 4; }
+        .panel-4 { grid-column: span 12; }
+        .panel-5 { grid-column: span 6; }
+        .panel-6 { grid-column: span 6; }
+
+        .panel-img {
+            flex: 1;
+            background: var(--plum-mid);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .panel-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(120%) brightness(80%);
+            mix-blend-mode: multiply;
+        }
+
+        .panel-img::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(45deg, rgba(201,168,76,0.2), transparent);
+        }
+
+        .caption {
+            background: var(--gold);
+            padding: 10px 15px;
+            border-bottom: 3px solid var(--ink);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+        }
+
+        .bottom-caption {
+            top: auto; bottom: 0; left: 0; right: 0;
+            border-bottom: none; border-top: 3px solid var(--ink);
+            background: white;
+            padding: 15px;
+        }
+
+        .bubble {
+            background: white;
+            border: 3px solid var(--ink);
+            border-radius: 50%;
+            padding: 20px;
+            position: absolute;
+            max-width: 150px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.1);
+        }
+
+        .bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 20px;
+            border-width: 15px 15px 0 0;
+            border-style: solid;
+            border-color: var(--ink) transparent transparent transparent;
+        }
+
+        .action-word {
+            font-family: 'Bangers', cursive;
+            font-size: 80px;
+            color: white;
+            text-shadow: 6px 6px var(--plum), -2px -2px var(--plum), 2px -2px var(--plum), -2px 2px var(--plum);
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            z-index: 5;
+            pointer-events: none;
+            letter-spacing: 5px;
+        }
+
+        .hero-banner {
+            grid-column: span 12;
+            background: var(--plum);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border: 4px solid var(--ink);
+            margin: 20px 0;
+        }
+
+        .hero-banner h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-family: 'Bangers', cursive;
+            font-size: 20px;
+            letter-spacing: 2px;
+            color: var(--plum);
+        }
+
+        .nav-back {
+            position: fixed;
+            top: 20px; left: 20px;
+            background: var(--ink);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-family: 'Bangers', cursive;
+            z-index: 1000;
+            border: 2px solid var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .grid { display: flex; flex-direction: column; }
+            .panel-1, .panel-2, .panel-3, .panel-4, .panel-5, .panel-6 { grid-column: span 12; }
+            .logo-box h1 { font-size: 48px; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="mcfg-corrected_6.html" class="nav-back">← BACK TO HQ</a>
+
+    <div class="comic-container">
+        <header>
+            <div class="logo-box">
+                <h1>BASTET</h1>
+            </div>
+            <div class="issue-info">
+                NO. 1 <br>
+                AUG 2026 <br>
+                $FREE
+            </div>
+        </header>
+
+        <div class="grid">
+            <!-- PANEL 1: THE PROBLEM -->
+            <div class="panel panel-1">
+                <div class="caption">The Crisis</div>
+                <div class="panel-img">
+                    <div class="bubble" style="top: 20px; right: 20px;">I don't know where to turn...</div>
+                    <div class="action-word" style="font-size: 120px; color: #ff3e3e;">HELP!</div>
+                </div>
+                <div class="bottom-caption">
+                    In the shadows of the Lowcountry, survivors were left in the dark. No map, no safety net, no way out.
+                </div>
+            </div>
+
+            <!-- PANEL 2: THE SPARK -->
+            <div class="panel panel-2">
+                <div class="caption">The Idea</div>
+                <div class="panel-img" style="background: var(--gold);">
+                    <div class="action-word" style="font-size: 40px; color: white;">A-HA!</div>
+                </div>
+                <div class="bottom-caption">
+                    We asked: What if technology was a shield, not a barrier?
+                </div>
+            </div>
+
+            <!-- PANEL 3: THE BUILD -->
+            <div class="panel panel-3">
+                <div class="caption">The Forge</div>
+                <div class="panel-img">
+                    <div class="action-word" style="font-size: 40px;">BUILD!</div>
+                </div>
+                <div class="bottom-caption">
+                    Built with survivors, for survivors. Privacy-first, safety-always.
+                </div>
+            </div>
+
+            <!-- PANEL 4: THE REVEAL -->
+            <div class="panel panel-4">
+                <div class="hero-banner">
+                    <h2>UNLEASH THE POWER OF ACCESS!</h2>
+                    <p>Bastet arrives to light the path to safety.</p>
+                </div>
+            </div>
+
+            <!-- PANEL 5: IMPACT -->
+            <div class="panel panel-5">
+                <div class="caption">The Victory</div>
+                <div class="panel-img" style="background: var(--accent);">
+                    <div class="action-word" style="font-size: 60px;">BOOM!</div>
+                </div>
+                <div class="bottom-caption">
+                    5+ Partners. 3 Regions. Countless safe nights found.
+                </div>
+            </div>
+
+            <!-- PANEL 6: FUTURE -->
+            <div class="panel panel-6">
+                <div class="caption">To Be Continued...</div>
+                <div class="panel-img">
+                    <div class="bubble" style="bottom: 20px; left: 20px;">Safety is just a tap away.</div>
+                </div>
+                <div class="bottom-caption">
+                    The mission expands. Next stop: 2027.
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            MCFG COMICS GROUP &bull; AUTHORIZED FOR ALL SURVIVORS
+        </footer>
+    </div>
+
+</body>
+</html>
