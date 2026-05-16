@@ -1,483 +1,1906 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coming Soon | Marble Ceilings For Good</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marble Ceilings For Good — Community Innovation Lab</title>
+<meta name="description" content="Marble Ceilings For Good is a South Carolina nonprofit building technology for overlooked communities, starting in the Lowcountry with apps for those in need.">
+<meta name="keywords" content="nonprofit technology, South Carolina, Lowcountry, domestic violence app, community innovation, Bastet app, Berkeley County SC">
+<meta property="og:title" content="Marble Ceilings For Good">
+<meta property="og:description" content="Technology that moves people forward. A nonprofit innovation lab building apps for communities that need them most.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.mc-fg.org">
+<meta property="og:image" content="https://www.mc-fg.org/images/social-preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Marble Ceilings For Good">
+<meta name="twitter:description" content="Technology that moves people forward. A nonprofit innovation lab building apps for communities that need them most.">
+<meta name="twitter:image" content="https://www.mc-fg.org/images/social-preview.jpg">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.mc-fg.org">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="https://use.typekit.net/olk5una.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --plum: #4A1841; --plum-deep: #33102d; --plum-mid: #601f54;
+  --accent: #1E95B2; --accent-light: #48ADC4; --accent-pale: #D6E8F0;
+  --cream: #FAF7F2; --sand: #F0EBE1; --ink: #140E12;
+  --mid: #4A3F45; --light-border: rgba(74,24,65,0.12); --accent-border: rgba(30,149,178,0.25);
+  --font-headline: "freightdispcmp-pro", serif;
+  --font-body: "sirenne-eighteen-mvb", serif;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--cream); color: var(--ink); font-family: var(--font-body); font-weight: 400; overflow-x: hidden; }
+
+/* Accessibility Focus Styles */
+*:focus-visible { outline: 2px solid var(--plum); outline-offset: 2px; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+/* ════════════════════════════════
+   INTRO ANIMATION SCREEN
+════════════════════════════════ */
+#intro {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #0B0609;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+#intro.done { pointer-events: none; }
+
+/* Vignette overlay */
+#intro::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none; z-index: 2;
+}
+
+/* Canvas sits behind text */
+#root-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Light shaft overlay — renders above canvas, below text */
+.light-shaft {
+  position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 70%;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none; z-index: 3;
+}
+.light-shaft-2 {
+  position: absolute; top: -5%; left: 38%; width: 200px; height: 50%;
+  background: radial-gradient(ellipse 40% 100% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none; z-index: 3;
+}
+.light-shaft-3 {
+  position: absolute; top: -5%; left: 58%; width: 150px; height: 45%;
+  background: radial-gradient(ellipse 40% 100% at 50% 0%, rgba(240,220,160,0.08) 0%, transparent 80%);
+  opacity: 0;
+  pointer-events: none; z-index: 3;
+}
+
+/* Intro Quote */
+#intro-quote {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 40px; opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+.quote-text {
+  font-family: var(--font-headline); font-size: clamp(18px, 2.8vw, 26px);
+  color: var(--accent-pale); text-align: center; margin-bottom: 24px;
+  max-width: 90%; line-height: 1.35; white-space: nowrap;
+}
+.quote-author {
+  font-size: 13px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); width: 100%; max-width: 840px;
+  text-align: right; margin-top: 12px;
+}
+
+/* Intro text */
+.intro-text {
+  position: relative; z-index: 4;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.intro-text .intro-eyebrow {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+  color: #C7C7C7; margin-bottom: 18px;
+  display: block;
+}
+.intro-text .intro-name {
+  font-family: var(--font-headline); font-weight: 700;
+  font-size: clamp(28px, 5vw, 52px);
+  color: var(--cream); letter-spacing: 0.04em;
+  display: block; line-height: 1.2;
+}
+.intro-text .intro-name em {
+  font-style: italic; color: var(--accent-light);
+}
+
+/* Intro exit — wipe upward */
+#intro.exiting {
+  animation: introExit 1s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+@keyframes introExit {
+  0%   { clip-path: inset(0 0 0 0); opacity: 1; }
+  100% { clip-path: inset(0 0 100% 0); opacity: 1; }
+}
+
+/* Skip Intro Button */
+.skip-intro {
+  position: absolute; bottom: 40px; right: 40px; z-index: 100;
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-body);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+  cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 1s;
+}
+.skip-intro:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white; border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  width: 100%; max-width: 1264px; margin: 0 auto; z-index: 1001; /* Elevated above overlay */
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 56px;
+  background: rgba(250,247,242,0.94);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--light-border);
+  opacity: 0; transition: opacity 0.6s 0.2s, transform 0.6s 0.2s;
+}
+nav.visible { opacity: 1; }
+.nav-logo { display: flex; align-items: center; gap: 18px; }
+.nav-logo-mark {
+  width: 44px; height: 44px; background: var(--plum);
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-logo-mark span { font-family: var(--font-headline); font-weight: 700; font-size: 24px; color: var(--accent); font-style: italic; }
+.nav-wordmark { font-family: var(--font-headline); font-weight: 700; font-size: 19px; letter-spacing: 0.04em; color: var(--plum); }
+.nav-social { display: flex; gap: 18px; margin-right: 28px; align-items: center; }
+.nav-social a { color: var(--plum); opacity: 0.5; transition: all 0.3s ease; display: flex; align-items: center; }
+.nav-social a:hover { opacity: 1; transform: scale(1.1); color: var(--accent); }
+.nav-social svg { width: 16px; height: 16px; fill: currentColor; }
+.mobile-social { display: none; gap: 24px; margin-top: 40px; }
+@media (max-width: 1024px) {
+  .nav-social { display: none; }
+  .mobile-social { display: flex; }
+  .mobile-social a { color: var(--plum); opacity: 0.6; }
+  .mobile-social svg { width: 20px; height: 20px; fill: currentColor; }
+}
+.nav-links { display: flex; gap: 48px; list-style: none; }
+.nav-links a { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--plum); }
+.nav-cta { font-size: 11px; font-weight: 600; letter-spacing: 0.13em; text-transform: uppercase; padding: 11px 26px; background: var(--plum); color: var(--cream); text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.nav-cta:hover { background: var(--plum-deep); transform: translateY(-1px); }
+
+/* Nav Toggle (Mobile) */
+.nav-toggle {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  width: 24px; height: 18px;
+  position: relative; z-index: 1001;
+}
+.nav-toggle span {
+  display: block; width: 100%; height: 2px;
+  background: var(--plum);
+  position: absolute; left: 0;
+  transition: transform 0.3s, top 0.3s, opacity 0.3s;
+}
+.nav-toggle span:first-child { top: 0; }
+.nav-toggle span:last-child { top: 16px; }
+.nav-toggle.active span:first-child { top: 8px; transform: rotate(45deg); }
+.nav-toggle.active span:last-child { top: 8px; transform: rotate(-45deg); }
+
+/* ════════════════════════════════
+   MAIN SITE (hidden until intro done)
+════════════════════════════════ */
+#site { opacity: 0; transition: opacity 0.8s; max-width: 1264px; margin: 0 auto; background: var(--cream); position: relative; overflow-x: clip; }
+#site.visible { opacity: 1; }
+
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+.hero {
+  min-height: 100vh; position: relative; overflow: hidden; padding-top: 76px;
+  background: linear-gradient(90deg, var(--cream) 55%, var(--plum) 55%);
+}
+.hero::after {
+  content: ''; position: absolute; top: 0; right: 0; width: 45%; bottom: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px; pointer-events: none;
+}
+.hero-inner { position: relative; z-index: 2; min-height: calc(100vh - 76px); display: flex; flex-direction: column; }
+.hero-meta-row { display: flex; justify-content: space-between; align-items: center; padding: 28px 56px 0; }
+.hero-meta-left { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); display: flex; align-items: center; gap: 16px; }
+.hero-meta-left::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+.hero-meta-right { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+.hero-tagline-wrap { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; padding: 24px 56px 0; }
+.hero-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
+.hero-h1 { font-family: var(--font-headline); font-weight: 700; font-size: clamp(52px, 7.5vw, 108px); line-height: 0.93; letter-spacing: -0.02em; margin-bottom: 0; }
+.hero-h1 .h1-dark { color: var(--ink); display: block; }
+.hero-h1 .h1-gold { color: var(--accent-light); display: block; font-style: italic; }
+.hero-bottom { padding: 48px 56px 64px; display: grid; grid-template-columns: 55fr 45fr; gap: 0; }
+.hero-bottom-left { padding-right: 0; display: flex; flex-direction: column; justify-content: flex-end; border-right: 1px solid var(--light-border); }
+.hero-mission { font-size: 22px; font-weight: 300; line-height: 1.75; color: var(--mid); margin-bottom: 36px; max-width: 480px; }
+.hero-mission strong { font-weight: 500; color: var(--plum); }
+.hero-actions { display: flex; gap: 20px; align-items: center; }
+.btn-primary { display: inline-flex; align-items: center; gap: 10px; padding: 15px 32px; background: var(--plum); color: var(--cream); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; }
+.btn-primary:hover { background: var(--plum-deep); transform: translateY(-2px); }
+.btn-primary .arrow { transition: transform 0.2s; }
+.btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-text { font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); text-decoration: none; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color 0.2s, border-color 0.2s; }
+.btn-text:hover { color: var(--plum); border-color: var(--plum); }
+.hero-bottom-right { padding-left: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+
+/* Mosaic grid — 4 squares like Concept 1 */
+.hero-mosaic {
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  gap: 0; flex: 1; margin: 0 -56px 0 0;
+  min-height: 320px;
+}
+.mosaic-cell {
+  position: relative; overflow: hidden;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.3s;
+}
+.mosaic-cell:nth-child(1) { background: rgba(201,168,76,0.14); }
+.mosaic-cell:nth-child(2) { background: rgba(255,255,255,0.04); }
+.mosaic-cell:nth-child(3) { background: rgba(255,255,255,0.07); }
+.mosaic-cell:nth-child(4) { background: rgba(201,168,76,0.07); }
+.mosaic-cell-inner {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent 60%, rgba(74,24,65,0.35));
+}
+/* Stat anchored in cell 1 */
+.mosaic-stat {
+  position: absolute; bottom: 32px; left: 32px; right: 32px;
+}
+.mosaic-stat-num {
+  font-family: var(--font-headline); font-weight: 700;
+  font-size: 48px; font-weight: 400; line-height: 1;
+  color: var(--accent-light); display: block;
+}
+.mosaic-stat-label {
+  font-size: 13px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.95); margin-top: 8px; display: block; line-height: 1.4;
+}
+/* Grid lines texture inside cells */
+.mosaic-cell::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+/* Project list in cell 4 */
+.mosaic-projects {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 20px 28px;
+  gap: 0;
+}
+.mosaic-project-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+  cursor: pointer; transition: padding-left 0.2s;
+  flex-shrink: 0;
+}
+.mosaic-project-item:last-child { padding-bottom: 0; border-bottom: none; }
+.mosaic-project-item:first-child { border-top: none; }
+.mosaic-project-item:hover { padding-left: 4px; }
+.mosaic-project-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); line-height: 1.3; }
+.mosaic-project-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(201,168,76,1); flex-shrink: 0; margin-left: 8px; }
+
+/* ════════════════════════════════
+   MISSION STRIP
+════════════════════════════════ */
+.mission-strip { display: grid; grid-template-columns: 1fr 2px 1fr; background: var(--plum); padding: 72px 56px; align-items: center; }
+.mission-divider { background: rgba(255,255,255,0.1); height: 100%; }
+.mission-left { padding-right: 64px; }
+.mission-right { padding-left: 64px; }
+.mission-kicker { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.mission-kicker::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+.mission-quote { font-family: var(--font-headline); font-weight: 700; font-size: clamp(22px, 2.5vw, 34px); font-weight: 400; color: var(--cream); line-height: 1.35; }
+.mission-quote em { font-style: italic; color: var(--accent-light); }
+.mission-body { font-size: 19px; line-height: 1.9; color: rgba(255,255,255,0.7); font-weight: 300; }
+
+/* ════════════════════════════════
+   PILLARS
+════════════════════════════════ */
+.pillars { padding: 100px 56px; }
+.section-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--plum); margin-bottom: 16px; display: flex; align-items: center; gap: 14px; }
+.section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+.section-heading { font-family: var(--font-headline); font-weight: 700; font-size: clamp(34px, 4vw, 52px); font-weight: 400; color: var(--plum); line-height: 1.15; margin-bottom: 64px; max-width: 560px; }
+.pillars-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--light-border); }
+.pillar { padding: 52px 44px; border-right: 1px solid var(--light-border); position: relative; overflow: hidden; transition: background 0.3s; }
+.pillar:last-child { border-right: none; }
+.pillar:hover { background: white; }
+.pillar-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+.pillar:hover .pillar-accent { transform: scaleX(1); }
+.pillar-num { font-family: var(--font-headline); font-weight: 700; font-size: 13px; font-style: italic; color: var(--plum); margin-bottom: 20px; display: block; }
+.pillar-title { font-size: 17px; font-weight: 500; color: var(--plum); margin-bottom: 16px; }
+.pillar-body { font-size: 18px; line-height: 1.85; color: var(--mid); font-weight: 300; }
+
+/* ════════════════════════════════
+   PROJECTS
+════════════════════════════════ */
+.projects { padding: 0 56px 100px; }
+.projects-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid var(--light-border); padding-bottom: 20px; margin-bottom: 0; }
+.projects-count { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); }
+.project-row { display: grid; grid-template-columns: 48px 1fr auto auto; align-items: center; gap: 40px; padding: 36px 0; border-bottom: 1px solid var(--light-border); cursor: pointer; position: relative; transition: padding-left 0.25s; }
+.project-row::before { content: ''; position: absolute; left: -56px; right: -56px; top: 0; bottom: 0; background: var(--sand); opacity: 0; transition: opacity 0.2s; z-index: -1; }
+.project-row:hover { padding-left: 12px; }
+.project-row:hover::before { opacity: 1; }
+.p-num { font-family: var(--font-headline); font-weight: 700; font-style: italic; font-size: 16px; color: var(--accent-border); transition: color 0.2s; }
+.project-row:hover .p-num { color: var(--accent); }
+.p-name { font-family: var(--font-headline); font-weight: 700; font-size: 28px; font-weight: 400; color: var(--plum); margin-bottom: 4px; }
+.p-desc { font-size: 17px; color: var(--mid); line-height: 1.6; font-weight: 300; max-width: 520px; }
+.p-type { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid); white-space: nowrap; }
+.p-status { text-align: right; white-space: nowrap; }
+.status-pill { display: inline-block; padding: 6px 16px; border-radius: 40px; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border: 2px solid; }
+.s-live { border-color: rgba(201,168,76,0.6); color: var(--accent); background: rgba(201,168,76,0.06); }
+.s-build { border-color: rgba(74,25,66,0.4); color: var(--plum); font-size: 13px; }
+.s-disc { border-color: rgba(74,25,66,0.25); color: var(--mid); }
+
+/* ════════════════════════════════
+   MEDIA SECTION
+   ════════════════════════════════ */
+.media-section { background: var(--sand); padding: 100px 56px; border-top: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 40px; margin-top: 60px; }
+.media-card { position: relative; cursor: pointer; }
+.media-thumb { 
+  aspect-ratio: 16/9; background: var(--plum); position: relative; overflow: hidden; 
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+}
+.media-card:hover .media-thumb { transform: translateY(-8px); }
+.media-play-btn {
+  width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,0.3); z-index: 2; transition: background 0.3s;
+}
+.media-play-btn svg { fill: white; margin-left: 4px; }
+.media-card:hover .media-play-btn { background: var(--accent); border-color: var(--accent); }
+.media-info { padding: 24px 0; }
+.media-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--plum); margin-bottom: 10px; display: block; }
+.media-title { font-family: var(--font-headline); font-size: 24px; color: var(--plum); margin-bottom: 8px; line-height: 1.2; }
+.media-desc { font-size: 16px; line-height: 1.6; color: var(--mid); font-weight: 300; }
+
+/* ════════════════════════════════
+   IMPACT NUMBERS
+════════════════════════════════ */
+.impact { background: var(--sand); padding: 80px 56px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); }
+.impact-cell { padding: 36px 32px; border-right: 1px solid var(--light-border); text-align: center; }
+.impact-cell:last-child { border-right: none; }
+.impact-num { font-family: var(--font-headline); font-weight: 700; font-size: 52px; color: var(--plum); line-height: 1; margin-bottom: 10px; }
+.impact-label { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mid); }
+
+/* ════════════════════════════════
+   MEDIA PAGE
+════════════════════════════════ */
+.media-page { padding: 100px 56px; }
+.featured-video-wrap { position: relative; margin-bottom: 100px; }
+.featured-video { aspect-ratio: 16/9; background: var(--plum-deep); border: 1px solid var(--light-border); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.featured-video::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.4) 100%); }
+.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin: 60px 0 100px; }
+.event-card { background: white; border: 1px solid var(--light-border); padding: 40px; transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1); cursor: pointer; }
+.event-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(74,25,66,0.08); border-color: var(--accent-border); }
+.event-date { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--plum); margin-bottom: 16px; display: block; }
+.event-title { font-family: var(--font-headline); font-size: 26px; color: var(--plum); margin-bottom: 12px; line-height: 1.2; }
+.event-desc { font-size: 15px; color: var(--mid); line-height: 1.7; font-weight: 300; }
+
+/* ════════════════════════════════
+   BOARD PAGE
+════════════════════════════════ */
+.board-page { padding: 100px 56px; }
+.board-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 80px; }
+.board-intro-right p { font-size: 19px; line-height: 1.9; color: var(--mid); font-weight: 300; }
+
+.board-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.board-card {
+  background: white; padding: 0;
+  border: 1px solid var(--light-border);
+  overflow: hidden; position: relative;
+  transition: box-shadow 0.3s;
+}
+.board-card:hover { box-shadow: 0 8px 40px rgba(74,25,66,0.10); }
+
+/* Monogram portrait area */
+.board-portrait {
+  height: 320px; background: var(--plum);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.board-portrait img {
+  width: 100%; height: 100%; object-fit: cover;
+  object-position: center 30%;
+  position: relative; z-index: 2;
+}
+.board-portrait::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+.board-portrait-alt { background: var(--plum-deep); }
+.board-portrait-alt2 { background: var(--plum-mid); }
+.board-monogram {
+  font-family: var(--font-headline); font-weight: 700;
+  font-size: 88px; font-style: italic;
+  color: rgba(201,168,76,0.25);
+  line-height: 1; position: relative; z-index: 1;
+  user-select: none;
+}
+.board-role-badge {
+  position: absolute; bottom: 16px; left: 16px; right: 16px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  padding: 8px 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.board-role-text { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--plum); }
+.board-role-org { font-size: 10px; font-weight: 400; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); }
+
+.board-body { padding: 32px; }
+.board-name { font-family: var(--font-headline); font-weight: 700; font-size: 22px; font-weight: 400; color: var(--plum); margin-bottom: 4px; line-height: 1.2; }
+.board-title { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--plum); margin-bottom: 20px; }
+.board-bio { font-size: 17px; line-height: 1.85; color: var(--mid); font-weight: 300; }
+
+/* Founder card — spans full width differently */
+.board-card.founder { grid-column: 1 / -1; }
+.board-card.founder .board-portrait { height: 180px; background: var(--accent); }
+.board-card.founder .board-portrait::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(74,25,66,0.5), rgba(201,168,76,0.08));
+}
+.board-card.founder .board-layout { display: grid; grid-template-columns: 224px 1fr; }
+.board-card.founder .board-portrait { height: 100%; min-height: 280px; }
+.board-card.founder .board-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+.board-card.founder .board-name { font-size: 32px; margin-bottom: 6px; }
+.board-card.founder .board-bio { font-size: 18px; max-width: 640px; }
   
-  <!-- Fonts: Gloock and Montserrat -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  /* Contributors Section */
+  .contributors-section { margin-top: 120px; border-top: 1px solid var(--light-border); padding-top: 80px; }
+  .contributors-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .contributor-card { background: white; border: 1px solid var(--light-border); display: flex; align-items: center; padding: 24px; transition: transform 0.3s; }
+  .contributor-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(74,25,66,0.08); }
+  .contributor-portrait { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin-right: 24px; flex-shrink: 0; background: var(--sand); border: 2px solid var(--accent-light); }
+  .contributor-portrait img { width: 100%; height: 100%; object-fit: cover; }
+  .contributor-info { flex: 1; }
+  .contributor-name { font-family: var(--font-headline); font-weight: 700; font-size: 18px; color: var(--plum); margin-bottom: 2px; }
+  .contributor-title { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--plum); }
+
+/* ════════════════════════════════
+   CTA BAND
+════════════════════════════════ */
+.cta-band { background: var(--plum); display: grid; grid-template-columns: 1fr 1px 1fr; min-height: 360px; }
+.cta-col { padding: 72px 64px; display: flex; flex-direction: column; justify-content: space-between; }
+.cta-divider-line { background: rgba(255,255,255,0.1); }
+.cta-col h3 { font-family: var(--font-headline); font-weight: 700; font-size: clamp(26px, 3vw, 38px); font-weight: 400; color: var(--cream); line-height: 1.2; margin-bottom: 16px; }
+.cta-col h3 em { font-style: italic; color: var(--accent-light); }
+.cta-col p { font-size: 18px; line-height: 1.9; color: rgba(255,255,255,0.7); font-weight: 300; margin-bottom: 40px; }
+.btn-gold { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 16px 32px; background: var(--accent); color: var(--plum-deep); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.btn-gold:hover { background: var(--accent-light); transform: translateY(-2px); }
+.btn-outline-cream { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; padding: 16px 32px; border: 1px solid rgba(255,255,255,0.25); color: var(--cream); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+.btn-outline-cream:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+footer { background: var(--plum-deep); padding: 56px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(201,168,76,0.15); }
+.footer-brand { font-family: var(--font-headline); font-weight: 700; font-size: 20px; letter-spacing: 0.05em; color: var(--cream); margin-bottom: 10px; }
+.footer-sub { font-size: 11px; color: rgba(255,255,255,0.6); letter-spacing: 0.06em; }
+.footer-right { font-size: 11px; color: rgba(255,255,255,0.6); text-align: right; line-height: 1.8; }
+.footer-gold-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); vertical-align: middle; margin: 0 8px; opacity: 0.5; }
+.footer-social { display: flex; gap: 20px; margin-top: 24px; justify-content: flex-end; }
+.footer-social a { color: var(--cream); opacity: 0.5; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; }
+.footer-social a:hover { opacity: 1; transform: translateY(-3px); color: var(--accent); }
+.footer-social svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* ════════════════════════════════
+   SCROLL REVEAL
+════════════════════════════════ */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; } .d4 { transition-delay: 0.4s; }
+
+/* ════════════════════════════════
+   CHAPTER LAYOUT (From Bastet Page)
+   ════════════════════════════════ */
+.lc-chapter { padding: 120px 56px; border-bottom: 1px solid var(--light-border); }
+.lc-chapter.alt { background: #fcfbf8; }
+.lc-chapter-head { display: grid; grid-template-columns: 80px 1fr; gap: 48px; margin-bottom: 80px; align-items: start; }
+.lc-chapter-head .num { font-family: var(--font-headline); font-size: 110px; font-weight: 700; color: var(--plum); opacity: 0.15; line-height: 0.8; margin-top: -10px; }
+.lc-chapter-head .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: var(--plum); display: block; margin-bottom: 24px; }
+.lc-chapter-head h2 { font-family: var(--font-headline); font-size: 56px; font-weight: 700; line-height: 1.1; color: var(--plum); max-width: 680px; }
+.lc-chapter-head h2 em { font-style: italic; color: var(--accent); font-weight: 400; }
+.lc-chapter-head .deck { font-size: 22px; line-height: 1.5; color: var(--mid); margin-top: 32px; max-width: 600px; font-weight: 300; }
+
+.lc-chapter-body { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1100px; margin: 0 auto; }
+.lc-chapter-body.single { grid-template-columns: 1fr; max-width: 800px; }
+.lc-chapter-body p { font-size: 20px; line-height: 1.85; color: var(--mid); margin-bottom: 32px; font-weight: 300; }
+.lc-chapter-body p strong { font-weight: 600; color: var(--plum); }
+
+.lc-pull-quote { position: relative; padding: 48px 0; border-top: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); margin: 56px 0; }
+.lc-pull-quote-text { font-family: var(--font-headline); font-size: 38px; line-height: 1.25; color: var(--plum); font-weight: 700; }
+.lc-pull-quote-text em { color: var(--accent); font-style: italic; font-weight: 400; }
+
+.lc-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-top: 56px; }
+.lc-stat-item .v { font-family: var(--font-headline); font-size: 48px; font-weight: 700; color: var(--plum); line-height: 1; margin-bottom: 12px; }
+.lc-stat-item .k { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); opacity: 0.8; }
+
+/* Responsive Chapters */
+@media (max-width: 1024px) {
+  .lc-chapter { padding: 80px 24px; }
+  .lc-chapter-head { grid-template-columns: 1fr; gap: 12px; }
+  .lc-chapter-head .num { font-size: 64px; margin-top: 0; margin-bottom: 20px; }
+  .lc-chapter-head h2 { font-size: 32px; }
+  .lc-chapter-body { grid-template-columns: 1fr; gap: 40px; }
+  .lc-pull-quote-text { font-size: 28px; }
+}
+
+
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+.nav-links a { position: relative; }
+.nav-links a.active { color: var(--plum) !important; font-weight: 600; }
+.nav-links a.active::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+
+/* RESPONSIVE OVERRIDES (Early Stacking for Fluidity) */
+@media (max-width: 1024px) {
+  nav { padding: 18px 24px; left: 0; transform: none; width: 100%; max-width: none; }
+  .nav-links {
+    position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
+    display: flex; flex-direction: column; align-items: flex-start; 
+    justify-content: flex-start; padding: 120px 40px;
+    gap: 32px; z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+  }
+  .nav-links::before {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(250, 247, 242, 0.98); /* Much more opaque for visibility */
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    z-index: -1; border-left: 1px solid rgba(74,24,65,0.2);
+  }
+  .nav-links.active { transform: translateX(0); }
+  .nav-overlay {
+    position: fixed; inset: 0; background: rgba(11, 6, 9, 0.45);
+    z-index: 999; /* Below nav container (1001) */
+    opacity: 0; pointer-events: none; transition: opacity 0.4s;
+  }
+  .nav-overlay.active { opacity: 1; pointer-events: auto; }
+  .nav-links a { 
+    position: relative; z-index: 2; /* Ensure links are above pseudo-glass */
+    font-size: 24px; color: var(--plum); font-weight: 600; 
+    width: 100%; border-bottom: 1px solid rgba(74,24,65,0.15); padding-bottom: 12px;
+    text-shadow: none; /* Remove text shadow for cleaner look */
+  }
+  .nav-links a.active::after { bottom: 8px; }
+  .nav-cta { display: none !important; }
+  .nav-toggle { display: block !important; }
+
+  .hero { background: var(--cream) !important; }
+  .hero::after { display: none !important; }
+  .hero-bottom { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .hero-bottom-left { border-right: none !important; padding: 48px 24px 64px !important; }
+  .hero-bottom-right { background: var(--plum) !important; padding: 64px 24px !important; border-top: 1px solid rgba(255,255,255,0.1) !important; }
+  .hero-mosaic { min-height: 500px !important; display: flex !important; flex-direction: column !important; gap: 12px !important; margin: 0 !important; }
+  .mosaic-cell { position: relative !important; min-height: 160px !important; border-radius: 4px !important; overflow: visible !important; }
+  .mosaic-stat-num { font-size: 42px !important; }
+  .mosaic-stat-label { color: rgba(255,255,255,0.9) !important; font-size: 11px !important; }
+  .mosaic-project-name { color: rgba(255,255,255,0.9) !important; }
+  .hero-h1 { font-size: clamp(38px, 9vw, 52px) !important; }
+
+  .mission-strip { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
+  .mission-divider { height: 1px; width: 100%; }
+  .mission-left, .mission-right { padding: 0; }
+
+  .pillars-grid { grid-template-columns: 1fr !important; border-right: none; border-top: 1px solid var(--light-border); }
+  .pillar { border-right: none !important; border-bottom: 1px solid var(--light-border); padding: 40px 24px; }
+  .pillar:last-child { border-bottom: none; }
+
+  .impact { grid-template-columns: 1fr !important; gap: 0; }
+  .impact-cell { border-right: none !important; border-bottom: 1px solid var(--light-border); padding: 48px 24px; text-align: center; }
+  .impact-cell:last-child { border-bottom: none; }
+
+  .media-page { padding: 100px 24px 60px; }
+  .featured-video-wrap { margin-bottom: 60px; }
+  .media-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  .media-thumb { aspect-ratio: 4/3 !important; }
+
+/* Media Coming Soon */
+.media-coming-soon {
+  position: relative; padding: 120px 24px; text-align: center;
+  background: var(--plum-deep); border-radius: 12px; overflow: hidden;
+}
+.media-coming-soon::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(30,149,178,0.15) 0%, transparent 70%);
+}
+.media-coming-soon h3 {
+  font-family: var(--font-headline); font-size: 48px; color: var(--cream);
+  margin-bottom: 16px; position: relative; z-index: 1;
+}
+.media-coming-soon p {
+  color: var(--accent-light); font-size: 14px; font-weight: 600;
+  letter-spacing: 0.25em; text-transform: uppercase; position: relative; z-index: 1;
+}
+
+  .project-row { grid-template-columns: 1fr !important; gap: 16px; padding: 32px 0; }
+  .project-row::before { left: -24px; right: -24px; }
+  .p-type { display: none; }
+  .p-status { text-align: left; }
+
+  .board-intro { grid-template-columns: 1fr; gap: 32px; }
+  .board-grid { grid-template-columns: 1fr !important; }
+  .board-card.founder .board-layout { grid-template-columns: 1fr !important; }
+  .board-card.founder .board-portrait { height: 320px; }
+  .board-card.founder .board-body { padding: 32px 24px; }
+
+  .cta-band { grid-template-columns: 1fr; }
+  .cta-divider-line { height: 1px; width: 100%; }
+  .cta-col { padding: 48px 24px; }
   
-  <style>
-    :root {
-      --jordan-blue: #1E95B2;
-      --eggplant: #614051;
-      --eggplant-glow: rgba(97, 64, 81, 0.4);
-      --jordan-glow: rgba(30, 149, 178, 0.4);
-      --bg-dark: #0b0b0b;
-      --text-light: #F2F3ED;
-      --glass-bg: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      
-      --font-display: 'Gloock', serif;
-      --font-body: 'Montserrat', sans-serif;
-    }
+  .ecosystem-grid { grid-template-columns: 1fr !important; }
+  .about-page { padding: 120px 24px 80px; }
+  .about-header h2 { font-size: 32px !important; }
+  .about-header .eyebrow { font-size: 12px; }
+  .about-lead { padding-left: 20px; font-size: 20px; }
+  .about-quote-block { padding: 60px 24px; }
+  .about-quote-text { font-size: 24px !important; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+  .contributors-grid { grid-template-columns: 1fr !important; gap: 12px; }
+  .contributor-card { padding: 20px; }
 
-    body, html {
-      width: 100%; min-height: 100%;
-      background: linear-gradient(135deg, #2b1a2b 0%, #0b0b0b 100%);
-      color: var(--text-light);
-      font-family: var(--font-body);
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
+  footer { flex-direction: column; align-items: flex-start; gap: 40px; padding: 48px 24px; }
+  .footer-right { text-align: left; }
+  .footer-social { justify-content: flex-start; margin-top: 16px; }
+}
 
-    /* Main Container */
-    .container {
-      position: relative;
-      z-index: 10;
-      width: 100%; height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px;
-    }
+@media (max-width: 480px) {
+  .hero-meta-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .hero-meta-right { color: var(--mid); }
+  .hero-tagline-wrap { padding-top: 24px; }
+  .hero-h1 { font-size: 34px; }
+}
 
-    /* Titles */
-    .page-title {
-      font-family: var(--font-display);
-      font-size: clamp(32px, 5vw, 56px);
-      text-align: center;
-      margin-bottom: 8px;
-      letter-spacing: 0.02em;
-      
-      /* Subtle gradient text */
-      background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      opacity: 0;
-      animation: fadeInDown 1.2s ease forwards 0.3s;
-    }
-
-    .page-subtitle {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: clamp(12px, 2vw, 16px);
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: var(--jordan-blue);
-      text-align: center;
-      margin-bottom: 60px;
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards 0.6s;
-    }
-
-                /* Periodic Grid */
-    .periodic-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 130px);
-      grid-template-rows: repeat(3, 130px);
-      gap: 2px;
-      justify-content: center;
-      position: relative;
-      perspective: 1200px;
-    }
-
-    /* Element Card */
-    .element-card {
-      background: rgba(255, 255, 255, 0.05); /* slightly more visible */
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 4px; /* subtle rounding for glass */
-      backdrop-filter: blur(14px); /* deeper frost */
-      -webkit-backdrop-filter: blur(14px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 12px;
-      transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-      opacity: 0;
-      transform: scale(0.95);
-      cursor: default;
-      box-shadow: 
-        inset 0 0 10px rgba(255, 255, 255, 0.05),
-        0 15px 35px rgba(0, 0, 0, 0.2);
-    }
-
-    .element-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%);
-      pointer-events: none;
-    }
-
-    .element-card:hover {
-      transform: scale(1.05);
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      z-index: 20 !important;
-      border-radius: 4px;
-    }
-
-    .element-top-row {
-      position: absolute;
-      top: 8px;
-      left: 10px;
-      right: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 11px;
-      color: rgba(242, 243, 237, 0.6);
-      font-weight: 500;
-    }
-
-    .element-symbol {
-      font-family: var(--font-display);
-      font-size: 48px;
-      line-height: 1;
-      margin-top: 16px;
-      margin-bottom: 8px;
-      color: #fff;
-    }
-
-    .element-name {
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(242, 243, 237, 0.85);
-      text-align: center;
-    }
-
-    /* Grid Positioning & Colored Borders */
-    .el-kn { grid-column: 2; grid-row: 1; border-top: 3px solid var(--jordan-blue); border-bottom: 1px solid rgba(30,149,178,0.2); animation: flipIn 0.8s forwards 1.2s; }
-    
-    .el-cr { grid-column: 1; grid-row: 2; border-top: 3px solid #dba9a9; border-bottom: 1px solid rgba(219,169,169,0.2); animation: flipIn 0.8s forwards 1.0s; }
-    
-    /* Center MCFG Element (Maintains its own style) */
-    .el-mcfg {
-      grid-column: 2;
-      grid-row: 2;
-      background: rgba(30, 149, 178, 0.05);
-      border: 1px solid rgba(30, 149, 178, 0.4);
-      animation: flipInCenter 1.2s forwards 1.4s;
-      z-index: 10;
-    }
-
-    .el-mcfg::before {
-      background: radial-gradient(circle at center, rgba(97, 64, 81, 0.15), transparent 70%);
-      content: ''; position: absolute; inset: 0; pointer-events: none;
-    }
-
-    .el-mcfg:hover {
-      transform: scale(1.05);
-      background: rgba(30, 149, 178, 0.12);
-      border-color: var(--jordan-blue);
-      box-shadow: 0 15px 40px var(--jordan-glow), 0 0 20px var(--eggplant-glow);
-    }
-
-    .el-mcfg .element-symbol {
-      color: #fff;
-      font-size: 38px;
-      text-align: center;
-      background: linear-gradient(90deg, #fff, var(--jordan-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .el-te { grid-column: 3; grid-row: 2; border-top: 3px solid #aab5d1; border-bottom: 1px solid rgba(170,181,209,0.2); animation: flipIn 0.8s forwards 1.4s; }
-    
-    .el-sp { grid-column: 2; grid-row: 3; border-top: 3px solid #cbad9b; border-bottom: 1px solid rgba(203,173,155,0.2); animation: flipIn 0.8s forwards 1.2s; }
-    .el-co { grid-column: 3; grid-row: 3; border-top: 3px solid var(--eggplant); border-bottom: 1px solid rgba(97,64,81,0.2); animation: flipIn 0.8s forwards 1.4s; }
-    .el-sa { grid-column: 4; grid-row: 3; border-top: 3px solid #e3c766; border-bottom: 1px solid rgba(227,199,102,0.2); animation: flipIn 0.8s forwards 1.6s; }
-
-    /* Bottom Date Strip */
-    /* Bottom Date Strip */
-    .launch-strip {
-      margin-top: 80px;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards 2.2s;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .launch-strip::before, .launch-strip::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: rgba(255,255,255,0.2);
-    }
-
-    /* Animations */
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes flipIn {
-      0% { opacity: 0; transform: perspective(1000px) rotateY(-90deg) scale(0.95); }
-      60% { opacity: 1; transform: perspective(1000px) rotateY(10deg) scale(1.02); }
-      80% { opacity: 1; transform: perspective(1000px) rotateY(-5deg) scale(1); }
-      100% { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); }
-    }
-
-    @keyframes flipInCenter {
-      0% { opacity: 0; transform: perspective(1000px) rotateY(-90deg) scale(0.9); box-shadow: none; }
-      60% { opacity: 1; transform: perspective(1000px) rotateY(10deg) scale(1.05); box-shadow: 0 0 60px var(--eggplant-glow); }
-      80% { opacity: 1; transform: perspective(1000px) rotateY(-5deg) scale(1); box-shadow: 0 0 40px var(--eggplant-glow); }
-      100% { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); box-shadow: 0 0 40px var(--eggplant-glow); }
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .periodic-grid {
-        grid-template-columns: repeat(4, 90px);
-        grid-template-rows: repeat(3, 90px);
-        gap: 1.5px;
-      }
-      .element-symbol { font-size: 36px; margin-top: 8px; }
-      .el-mcfg .element-symbol { font-size: 24px; margin-top: 18px; }
-      .element-top-row { font-size: 8px; top: 4px; left: 4px; right: 4px; }
-      .element-name { font-size: 7px; }
-      
-      @keyframes flipInCenter {
-        0% { opacity: 0; transform: perspective(1000px) rotateY(90deg) scale(0.9); }
-        100% { opacity: 1; transform: perspective(1000px) rotateY(0deg) scale(1); }
-      }
-    }
-
-    @media (max-width: 480px) {
-      .periodic-grid {
-        /* Restructure to fit entirely on mobile */
-        grid-template-columns: repeat(3, 100px);
-        grid-template-rows: repeat(3, 100px);
-        justify-content: center;
-        gap: 2px;
-      }
-      .el-kn { grid-column: 2; grid-row: 1; }
-      .el-cr { grid-column: 1; grid-row: 1; }
-      .el-mcfg { grid-column: 2; grid-row: 2; }
-      .el-te { grid-column: 3; grid-row: 2; }
-      .el-sp { grid-column: 1; grid-row: 2; }
-      .el-co { grid-column: 2; grid-row: 3; }
-      .el-sa { grid-column: 3; grid-row: 3; }
-    }
-
-    /* Contact Form Styles */
-    .form-heading {
-      font-family: var(--font-display);
-      font-size: clamp(24px, 4vw, 32px);
-      text-align: center;
-      margin-bottom: 24px;
-      color: var(--text-light);
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards 2.3s;
-    }
-    .contact-section {
-      margin-top: 60px;
-      width: 100%;
-      max-width: 500px;
-      opacity: 0;
-      animation: fadeInUp 1s ease forwards 2.5s;
-    }
-
-    .contact-form {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      padding: 30px;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      color: rgba(242, 243, 237, 0.6);
-      font-weight: 600;
-    }
-
-    .form-input {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-      padding: 12px 16px;
-      color: var(--text-light);
-      font-family: var(--font-body);
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: var(--jordan-blue);
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 15px var(--jordan-glow);
-    }
-
-    textarea.form-input {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .form-button {
-      background: linear-gradient(135deg, var(--jordan-blue), #167d96);
-      border: none;
-      border-radius: 4px;
-      padding: 14px;
-      color: #fff;
-      font-family: var(--font-body);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-    }
-
-    .form-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px var(--jordan-glow);
-      filter: brightness(1.1);
-    }
-
-    .form-button:active {
-      transform: translateY(0);
-    }
-  </style>
+/* ════════════════════════════════
+   WAITLIST MODAL
+════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(14,8,13,0.7);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 24px;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--cream); max-width: 520px; width: 100%;
+  padding: 56px 48px; position: relative;
+  transform: translateY(20px); transition: transform 0.35s ease;
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none; cursor: pointer;
+  font-size: 20px; color: var(--mid); line-height: 1;
+  padding: 4px 8px; transition: color 0.2s;
+}
+.modal-close:hover { color: var(--plum); }
+.modal-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--plum); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.modal-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+.modal-title { font-family: var(--font-headline); font-weight: 700; font-size: 32px; color: var(--plum); line-height: 1.15; margin-bottom: 12px; }
+.modal-title em { font-style: italic; }
+.modal-body { font-size: 14px; line-height: 1.8; color: var(--mid); margin-bottom: 32px; }
+.modal-form { display: flex; flex-direction: column; gap: 14px; }
+.modal-input {
+  width: 100%; padding: 14px 18px;
+  border: 1px solid var(--light-border); background: white;
+  font-family: var(--font-body); font-size: 15px; color: var(--ink);
+  outline: none; transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.modal-input:focus { border-color: var(--accent); }
+.modal-input::placeholder { color: rgba(74,63,69,0.45); }
+.modal-submit {
+  padding: 15px 32px; background: var(--plum); color: var(--cream);
+  border: none; cursor: pointer;
+  font-family: var(--font-body); font-size: 12px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  transition: background 0.2s, transform 0.2s;
+}
+.modal-submit:hover { background: var(--plum-deep); transform: translateY(-1px); }
+.modal-success { display: none; text-align: center; padding: 20px 0; }
+.modal-success-icon { font-size: 36px; margin-bottom: 16px; }
+.modal-success h4 { font-family: var(--font-headline); font-weight: 700; font-size: 22px; color: var(--plum); margin-bottom: 10px; }
+.modal-success p { font-size: 14px; color: var(--mid); line-height: 1.7; }
+.modal-note { font-size: 11px; color: rgba(74,63,69,0.5); margin-top: 12px; text-align: center; letter-spacing: 0.04em; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+</style>
 </head>
 <body>
 
-  <div class="container">
-    <h1 class="page-title">The Elements of Change</h1>
-    <div class="page-subtitle">Marble Ceilings For Good</div>
+<!-- ══════════════════════════════
+     INTRO ANIMATION
+══════════════════════════════ -->
+<div id="intro">
+  <canvas id="root-canvas" aria-hidden="true"></canvas>
+  <div class="light-shaft" id="ls1"></div>
+  <div class="light-shaft-2" id="ls2"></div>
+  <div class="light-shaft-3" id="ls3"></div>
+  <div class="intro-quote" id="intro-quote">
+    <div class="quote-text">"When the 'I' becomes 'We', even the illness becomes wellness"</div>
+    <div class="quote-author">— Malcolm X</div>
+  </div>
+  <div class="intro-text" id="intro-text">
+    <span class="intro-eyebrow">Rooted in community. Built for the future.</span>
+    <span class="intro-name">Marble Ceilings <em>For Good</em></span>
+  </div>
+  <button class="skip-intro" id="skip-intro-btn" onclick="cancelAnimationFrame(animFrame); exitIntro();">Skip Intro</button>
+</div>
 
-    <!-- Periodic Table -->
-    <div class="periodic-grid">
-      
-      <!-- Row 1 -->
-      <div class="element-card el-kn">
-        <div class="element-top-row">
-          <span class="atomic-num">1</span>
-          <span class="atomic-mass">1.008</span>
-        </div>
-        <div class="element-symbol">Em</div>
-        <div class="element-name">Empathy</div>
-      </div>
-      
-      <!-- Row 2 -->
-      <div class="element-card el-cr">
-        <div class="element-top-row">
-          <span class="atomic-num">3</span>
-          <span class="atomic-mass">6.940</span>
-        </div>
-        <div class="element-symbol">Cr</div>
-        <div class="element-name">Creativity</div>
-      </div>
+<!-- ══════════════════════════════
+     SITE
+══════════════════════════════ -->
+<div class="nav-overlay" id="nav-overlay" onclick="toggleMobileMenu()"></div>
+<nav id="main-nav">
+  <div class="nav-logo">
+    <div class="nav-logo-mark"><span>M</span></div>
+    <span class="nav-wordmark">Marble Ceilings For Good</span>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#" onclick="showPage('home',this);toggleMobileMenu()" role="button">Our Work</a></li>
+    <li><a href="#" onclick="showPage('about',this);toggleMobileMenu()" role="button">About</a></li>
+    <li><a href="#" onclick="showPage('board',this);toggleMobileMenu()" role="button">Board</a></li>
+    <li><a href="#" onclick="showPage('media',this);toggleMobileMenu()" role="button">Media</a></li>
+    <!-- Mobile Social -->
+    <li class="mobile-social">
+      <a href="https://www.facebook.com/profile.php?id=61589762973652" target="_blank" rel="noopener" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+      <a href="https://www.instagram.com/mc_forgood" target="_blank" rel="noopener" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      <a href="https://www.youtube.com/@MarbleCeilingsForGood" target="_blank" rel="noopener" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+    </li>
+  </ul>
+  <div class="nav-social">
+    <a href="https://www.facebook.com/profile.php?id=61589762973652" target="_blank" rel="noopener" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+    <a href="https://www.instagram.com/mc_forgood" target="_blank" rel="noopener" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+    <a href="https://www.youtube.com/@MarbleCeilingsForGood" target="_blank" rel="noopener" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+  </div>
+  <a href="#" onclick="openWaitlist();return false;" class="nav-cta" role="button">Support Us</a>
+  <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+  </button>
+</nav>
 
-      <div class="element-card el-mcfg">
-        <div class="element-top-row" style="color: var(--jordan-blue);">
-          <span class="atomic-num">MC</span>
-          <span class="atomic-mass">20.26</span>
-        </div>
-        <div class="element-symbol">MCFG</div>
-        <div class="element-name" style="letter-spacing: 0.15em;">The Core</div>
-      </div>
+<div id="site">
+  <main>
+  <div id="page-home-anchor"></div>
 
-      <div class="element-card el-te">
-        <div class="element-top-row">
-          <span class="atomic-num">4</span>
-          <span class="atomic-mass">9.012</span>
-        </div>
-        <div class="element-symbol">Te</div>
-        <div class="element-name">Technology</div>
-      </div>
+  <!-- ══ HOME PAGE ══ -->
+  <div id="page-home" class="page-section active">
+    <!-- Anchor for nav -->
+    <div id="page-home-anchor"></div>
 
-      <!-- Row 3 -->
-      <div class="element-card el-sp">
-        <div class="element-top-row">
-          <span class="atomic-num">5</span>
-          <span class="atomic-mass">10.81</span>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-meta-row">
+          <span class="hero-meta-left">Community Innovation Lab &nbsp;·&nbsp; Berkeley County, SC</span>
+          <span class="hero-meta-right">Est. 2026 &nbsp;·&nbsp; 501(c)(3) Pending</span>
         </div>
-        <div class="element-symbol">Sp</div>
-        <div class="element-name">Support</div>
-      </div>
-
-      <div class="element-card el-co">
-        <div class="element-top-row">
-          <span class="atomic-num">6</span>
-          <span class="atomic-mass">12.01</span>
+        <div class="hero-tagline-wrap">
+          <div class="hero-eyebrow">Nonprofit Technology for the Lowcountry</div>
+          <h1 class="hero-h1">
+            <span class="h1-dark">Technology</span>
+            <span class="h1-dark">that moves</span>
+            <span class="h1-gold">people forward.</span>
+          </h1>
         </div>
-        <div class="element-symbol">Co</div>
-        <div class="element-name">Community</div>
-      </div>
+        <div class="hero-bottom">
+          <div class="hero-bottom-left">
+            <p class="hero-mission">We build tools <strong>with and for communities</strong> that the world has overlooked — starting in South Carolina, with plans to grow everywhere it's needed.</p>
+            <div class="hero-actions">
+              <a href="#" class="btn-primary" onclick="scrollToProjects(); return false;">See Our Work <span class="arrow">→</span></a>
+              <a href="#" class="btn-text" onclick="showPage('about'); return false;">Our Story</a>
+            </div>
+          </div>
+          <div class="hero-bottom-right">
+            <div class="hero-mosaic">
 
-      <div class="element-card el-sa">
-        <div class="element-top-row">
-          <span class="atomic-num">2</span>
-          <span class="atomic-mass">4.002</span>
+              <!-- Cell 1: stat -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-stat">
+                  <span class="mosaic-stat-num">1 in 4</span>
+                  <span class="mosaic-stat-label">Women experience<br>domestic violence</span>
+                </div>
+              </div>
+
+              <!-- Cell 2: food insecurity stat -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-stat">
+                  <span class="mosaic-stat-num">14.4%</span>
+                  <span class="mosaic-stat-label">SC households face<br>food insecurity</span>
+                </div>
+              </div>
+
+              <!-- Cell 3: women's safety stat -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-stat">
+                  <span class="mosaic-stat-num">#43</span>
+                  <span class="mosaic-stat-label">SC ranks 43rd in U.S.<br>for women's safety</span>
+                </div>
+              </div>
+
+              <!-- Cell 4: project list -->
+              <div class="mosaic-cell">
+                <div class="mosaic-cell-inner"></div>
+                <div class="mosaic-projects">
+                  <div class="mosaic-project-item">
+                    <span class="mosaic-project-name">Bastet</span>
+                    <span class="mosaic-project-tag">Live</span>
+                  </div>
+                  <div class="mosaic-project-item">
+                    <span class="mosaic-project-name">Project Prodigy</span>
+                    <span class="mosaic-project-tag">Discovery</span>
+                  </div>
+                  <div class="mosaic-project-item">
+                    <span class="mosaic-project-name">Seshat</span>
+                    <span class="mosaic-project-tag">2027</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
-        <div class="element-symbol">Sa</div>
-        <div class="element-name">Safety</div>
       </div>
+    </section>
 
+    <!-- MISSION STRIP -->
+    <section class="mission-strip">
+      <div class="mission-left reveal">
+        <div class="mission-kicker">Why We Exist</div>
+        <p class="mission-quote">"Innovation shouldn't be a <em>zip code privilege.</em>"</p>
+      </div>
+      <div class="mission-divider"></div>
+      <div class="mission-right reveal d2">
+        <p class="mission-body">Marble Ceilings For Good is a South Carolina nonprofit proving that the most important technology of this decade doesn't have to start in Silicon Valley. We build apps, platforms, and research tools that close the gap between communities and the systems meant to serve them.</p>
+      </div>
+    </section>
+
+    <!-- PILLARS -->
+    <section class="pillars">
+      <div class="section-eyebrow reveal">What We Do</div>
+      <h2 class="section-heading reveal d1">Built around three commitments.</h2>
+      <div class="pillars-grid">
+        <div class="pillar reveal">
+          <div class="pillar-accent"></div>
+          <span class="pillar-num">i.</span>
+          <h3 class="pillar-title">Community-First Technology</h3>
+          <p class="pillar-body">Every product we build begins with listening — to survivors, advocates, and the people closest to the problem. Not to market research. Not to investors.</p>
+        </div>
+        <div class="pillar reveal d1">
+          <div class="pillar-accent"></div>
+          <span class="pillar-num">ii.</span>
+          <h3 class="pillar-title">Research & Advocacy</h3>
+          <p class="pillar-body">We translate community knowledge into data that moves policy, programs, and resources where they're needed most.</p>
+        </div>
+        <div class="pillar reveal d2">
+          <div class="pillar-accent"></div>
+          <span class="pillar-num">iii.</span>
+          <h3 class="pillar-title">Capacity Building</h3>
+          <p class="pillar-body">We share our tools, methods, and learnings with other organizations — because the mission is bigger than any one project.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects">
+      <div class="projects-header reveal">
+        <div>
+          <div class="section-eyebrow" style="margin-bottom:8px;">Active Projects</div>
+          <h2 class="section-heading" style="margin-bottom:0;font-size:clamp(28px,3vw,40px);">Where we show up.</h2>
+        </div>
+        <div class="projects-count">3 Projects</div>
+      </div>
+      <div class="project-row reveal" onclick="window.location.href='Bastet_Case_Study.html'" style="cursor: pointer;">
+        <div class="p-num">01</div>
+        <div class="p-info"><div class="p-name">Bastet</div><div class="p-desc">A mobile resource locator connecting domestic violence survivors in the SC Lowcountry to shelters, hotlines, and safe places — built with survivors, for survivors.</div></div>
+        <div class="p-type">Mobile App</div>
+        <div class="p-status"><span class="status-pill s-live">Live — Beta</span></div>
+      </div>
+      <div class="project-row reveal d1">
+        <div class="p-num">02</div>
+        <div class="p-info">
+          <div class="p-name">Project Prodigy</div>
+          <div class="p-desc">Details of this project are currently private during the discovery phase.</div>
+          <div style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:5px 12px;background:rgba(74,25,66,0.05);border:1px solid rgba(74,25,66,0.12);border-radius:3px;">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="5" width="10" height="7" rx="1.5" stroke="#7A6B73" stroke-width="1.1"/><path d="M3.5 5V3.5a2.5 2.5 0 0 1 5 0V5" stroke="#7A6B73" stroke-width="1.1" stroke-linecap="round"/></svg>
+            <span style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);">Private discovery — details restricted</span>
+          </div>
+        </div>
+        <div class="p-type">Health Tech</div>
+        <div class="p-status"><span class="status-pill s-disc">Discovery</span></div>
+      </div>
+      <div class="project-row reveal d2">
+        <div class="p-num">03</div>
+        <div class="p-info"><div class="p-name">Seshat</div><div class="p-desc">A community research platform that turns lived experience into actionable data — closing the gap between people and the programs meant to help them.</div></div>
+        <div class="p-type">Research Platform</div>
+        <div class="p-status"><span class="status-pill s-build">2027</span></div>
+      </div>
+    </section>
+
+    <!-- IMPACT -->
+    <div class="impact">
+      <div class="impact-cell reveal"><div class="impact-num" style="font-size: 28px; padding-top: 15px;">South Carolina</div><div class="impact-label">Lowcountry Roots</div></div>
+      <div class="impact-cell reveal d1"><div class="impact-num">5+</div><div class="impact-label">Partner Organizations</div></div>
+      <div class="impact-cell reveal d2"><div class="impact-num">3</div><div class="impact-label">Active Platforms</div></div>
+      <div class="impact-cell reveal d3"><div class="impact-num">0%</div><div class="impact-label">Of people who deserve less</div></div>
     </div>
 
-    <div class="launch-strip">
-      Launching Summer 2026
-    </div>
+    <!-- CTA -->
+    <section class="cta-band">
+      <div class="cta-col reveal">
+        <div><h3>Fund the <em>work.</em></h3><p>Your support builds technology that reaches survivors, strengthens research, and proves what community innovation looks like when it's done with care.</p></div>
+        <a href="#" onclick="openWaitlist();return false;" class="btn-gold">Join the Waitlist →</a>
+      </div>
+      <div class="cta-divider-line"></div>
+      <div class="cta-col reveal d1">
+        <div><h3>Partner <em>with us.</em></h3><p>If you're a funder, organization, technologist, or community member who wants to be part of something that actually matters — there's a place for you here.</p></div>
+        <a href="#" class="btn-outline-cream" onclick="openPartnerModal();return false;" role="button">Get in Touch →</a>
+      </div>
+    </section>
 
-    <div class="contact-section">
-      <h2 class="form-heading">Get in contact with Us:</h2>
-      <form class="contact-form" action="https://formspree.io/f/bertram@mc-fg.org" method="POST">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" class="form-input" placeholder="Your Name" required>
+  </div><!-- /page-home -->
+
+  <!-- ══ ABOUT PAGE ══ -->
+  <div id="page-about" class="page-section">
+    
+    <!-- Chapter 1: Purpose -->
+    <section class="lc-chapter">
+      <header class="lc-chapter-head reveal">
+        <div class="num">i.</div>
+        <div class="meta">
+          <span class="eyebrow">Our Purpose</span>
+          <h2>Rooted in the Lowcountry, <em>Built for Beyond.</em></h2>
+          <p class="deck">Marble Ceilings For Good is a non-profit innovation lab intent on producing user-friendly apps that target individuals who are often the last to know about help-seeking technologies.</p>
         </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com" required>
+      </header>
+      <div class="lc-chapter-body reveal d1">
+        <div>
+          <p>We believe that innovation shouldn't be a zip code privilege. Our mission is to build technology that moves people forward, closing the gap between vulnerable communities and the systems meant to serve them.</p>
+          <p>Every product we build begins with listening — to survivors, advocates, and the people closest to the problem. We translate community knowledge into tools that provide common sense solutions for people in unfortunately common situations.</p>
         </div>
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" class="form-input" placeholder="How can we help?" required></textarea>
+        <div class="lc-stat-grid">
+          <div class="lc-stat-item"><div class="v">501(c)(3)</div><div class="k">Pending Status</div></div>
+          <div class="lc-stat-item"><div class="v">SC</div><div class="k">Origin Region</div></div>
         </div>
-        <button type="submit" class="form-button">Contact Us Now</button>
+      </div>
+    </section>
+
+    <!-- Chapter 2: Origins -->
+    <section class="lc-chapter alt">
+      <header class="lc-chapter-head reveal">
+        <div class="num">ii.</div>
+        <div class="meta">
+          <span class="eyebrow">Our Origins</span>
+          <h2>A renewed promise to the <em>communities that shaped us.</em></h2>
+          <p class="deck">This endeavor is a lifetime in the making. I was taught early that if I could improve the lives of others, then I should.</p>
+        </div>
+      </header>
+      <div class="lc-chapter-body reveal d1">
+        <div>
+          <p>MCFG is the culmination of the lifelong influences of three people: my father (Bertram Moore, Jr), my mother (Viola Moore) and my aunt (Linda Gadson). My father advised me that my interest in cutting edge technology should not just be a way to make a living, but that I should use my acquired knowledge to do something impactful.</p>
+          <p>My mother and aunt were the front lines of service. As the Executive Director at Rural Mission Inc, my aunt provided for the many needs of Sea Island residents. Together, they taught me that serving others may not always be convenient, but you could make getting help more convenient.</p>
+        </div>
+        <div>
+          <div class="lc-pull-quote">
+            <p class="lc-pull-quote-text">"Rural Mission planted the seeds. <br><em>Marble Ceilings For Good is what has sprouted.</em>"</p>
+          </div>
+          <p>Rural Mission closed in 2019, but what it stood for didn't die. It lives on in seeing the humanity of all people and that people on the margins deserve much more than good intentions. The baton is in our hands now. We intend to run with it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter 3: Vision -->
+    <section class="lc-chapter">
+      <header class="lc-chapter-head reveal">
+        <div class="num">iii.</div>
+        <div class="meta">
+          <span class="eyebrow">Our Vision</span>
+          <h2>A trusted ecosystem of <em>safety, care, and support.</em></h2>
+          <p class="deck">We innovate for the domestic violence victim, the needy family, and the patient managing chronic illness without support.</p>
+        </div>
+      </header>
+      <div class="lc-chapter-body single reveal d1">
+        <p>MCFG is a trusted ecosystem of tools that promote safety, care, and support. Each product we build addresses at least one of those functions and together they address the needs of vulnerable communities whose crises often occur consecutively and/or simultaneously.</p>
+        
+        <div class="pillars-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+          <div class="pillar" style="background: white; padding: 40px; border: 1px solid var(--light-border); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+            <div class="pillar-accent"></div>
+            <h4 style="font-family: var(--ff-hd); font-size: 24px; color: var(--plum); margin-bottom: 16px;">Bastet</h4>
+            <p style="font-size: 16px; line-height: 1.7;">Provides up-to-date information for domestic violence victims (hotlines, emergency shelters, and other relevant resources).</p>
+          </div>
+          <div class="pillar" style="background: white; padding: 40px; border: 1px solid var(--light-border); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+            <div class="pillar-accent"></div>
+            <h4 style="font-family: var(--ff-hd); font-size: 24px; color: var(--plum); margin-bottom: 16px;">Project Prodigy</h4>
+            <p style="font-size: 16px; line-height: 1.7;">Features a patient-facing portal for the Sickle Cell Anemia community to access important data about and guidance on managing the disease.</p>
+          </div>
+          <div class="pillar" style="background: white; padding: 40px; border: 1px solid var(--light-border); box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
+            <div class="pillar-accent"></div>
+            <h4 style="font-family: var(--ff-hd); font-size: 24px; color: var(--plum); margin-bottom: 16px;">Seshat</h4>
+            <p style="font-size: 16px; line-height: 1.7;">Navigates through benefits systems for disadvantaged populations in South Carolina making complex programs more manageable.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /page-about -->
+
+  <!-- ══ BOARD PAGE ══ -->
+  <div id="page-board" class="page-section">
+    <section class="board-page">
+
+      <!-- Intro -->
+      <div class="board-intro">
+        <div class="board-intro-left reveal">
+          <div class="section-eyebrow">Leadership</div>
+          <h2 class="section-heading reveal d1" style="margin-bottom:0;">The people who said yes <em style="font-family:'DM Serif Display',serif;font-style:italic;color:var(--accent);">first.</em></h2>
+        </div>
+        <div class="board-intro-right reveal d2">
+          <p>Our board brings together expertise in public health, community organizing, technology, and advocacy — with roots in the communities we serve. Credibility and community aren't opposites here. They're the same thing.</p>
+        </div>
+      </div>
+
+      <!-- Founder card — full width -->
+      <div class="board-grid" style="margin-bottom:2px;">
+        <div class="board-card founder reveal">
+          <div class="board-layout">
+            <div class="board-portrait">
+              <img src="portrait-bertram.jpg" alt="Bertram Leroy Moore III">
+              <div class="board-role-badge">
+                <span class="board-role-text">Founder &amp; Executive Director</span>
+                <span class="board-role-org">MCFG</span>
+              </div>
+            </div>
+            <div class="board-body">
+              <div class="board-name">Bertram Leroy Moore III</div>
+              <div class="board-title">Founder | Executive Director</div>
+              <p class="board-bio">Bertram Moore III is a technologist who builds for people the system overlooks. After nearly 20 years at a Fortune 50 company, he's turning his focus to communities that don't typically benefit from innovation. His approach is simple: start with "How can I help?" and work from there.</p>
+              <p class="board-bio" style="margin-top: 12px;">Marble Ceilings For Good came from his desire to help victims of domestic violence — but he knew he couldn't do it alone. He built his board with people who have strong ideas, understand the mission, and are comfortable enough to rein him in when needed. That's why Dr. Scott and Yaunna Stewart were some of his first calls. While domestic violence is the start, projects addressing food security and supporting sickle cell patients are also in the works.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Board members grid -->
+      <div class="board-grid">
+        <div class="board-card reveal">
+          <div class="board-portrait board-portrait-alt">
+            <img src="dr_scott.jpeg" alt="Dr. Bertrina Lynn Scott">
+            <div class="board-role-badge">
+              <span class="board-role-text">Board Chair</span>
+              <span class="board-role-org">MCFG</span>
+            </div>
+          </div>
+          <div class="board-body">
+            <div class="board-name">Dr. Bertrina Lynn Scott</div>
+            <div class="board-title">Board Chair</div>
+            <p class="board-bio">Dr. Scott holds a Ph.D. in Developmental Psychology, specializing in child and adolescent development. Her early experiences with serving children and their families has led to her lifelong support of efforts that improve their well-being. As Board Chair, she provides governance oversight and strategic direction — ensuring that MCFG's work remains grounded in both rigorous practice and community trust. She was among the first to believe in this organization's potential.</p>
+          </div>
+        </div>
+
+        <div class="board-card reveal d1">
+          <div class="board-portrait board-portrait-alt2">
+            <img src="yaunna.png" alt="Yaunna Stewart">
+            <div class="board-role-badge">
+              <span class="board-role-text">Secretary</span>
+              <span class="board-role-org">MCFG</span>
+            </div>
+          </div>
+          <div class="board-body">
+            <div class="board-name">Yaunna Stewart</div>
+            <div class="board-title">Secretary of the Board</div>
+            <p class="board-bio">Yaunna Stewart is a committed nonprofit board member and passionate advocate for equity and community impact. A 2002 graduate of The Citadel she brings strong leadership and discipline to her service. As a Certified Occupational Therapy Assistant (COTA), she is dedicated to improving lives through compassionate care.</p>
+            <p class="board-bio" style="margin-top: 12px;">Originally from Florence, South Carolina, Yaunna is a proud wife of 16 years and a devoted boy mom. Her life experiences fuel her advocacy for women’s rights—especially protection, safety, and ensuring every woman has a voice. She stands firmly for justice, empowerment, and meaningful change.</p>
+          </div>
+        </div>
+
+        <div class="board-card reveal d2" style="border: 1px dashed rgba(74,25,66,0.18); background: var(--sand);">
+          <div class="board-portrait" style="background: var(--sand); border-bottom: 1px dashed rgba(74,25,66,0.18);">
+            <div class="board-monogram" style="color: rgba(74,25,66,0.10);">T</div>
+            <div class="board-role-badge" style="background: rgba(74,25,66,0.08);">
+              <span class="board-role-text" style="color:var(--mid);">Treasurer</span>
+              <span class="board-role-org">Recruiting</span>
+            </div>
+          </div>
+          <div class="board-body">
+            <div class="board-name" style="color:var(--mid);">Treasurer</div>
+            <div class="board-title" style="color:rgba(201,168,76,0.5);">Position Open</div>
+            <p class="board-bio" style="color:rgba(122,107,115,0.6);">We're actively recruiting a Treasurer with a background in finance, accounting, or nonprofit financial management. If you're passionate about community-centered work and want to help build something meaningful from the ground up, we'd love to hear from you.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contributors -->
+      <div class="contributors-section">
+        <div class="section-eyebrow" style="margin-bottom:32px;">Contributors</div>
+        <div class="contributors-grid">
+          
+          <div class="contributor-card reveal">
+            <div class="contributor-portrait">
+              <img src="leaeryn.JPG" alt="Leaeryn Moore">
+            </div>
+            <div class="contributor-info">
+              <div class="contributor-name">Leaeryn Moore</div>
+              <div class="contributor-title">Outreach Director</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CTA repeated on board page -->
+    <section class="cta-band">
+      <div class="cta-col">
+        <div><h3>Join the <em>board.</em></h3><p>We're looking for a Treasurer and additional directors who bring both expertise and heart. If you believe communities deserve better tools, let's talk.</p></div>
+        <a href="#" class="btn-gold" onclick="openPartnerModal();return false;">Express Interest →</a>
+      </div>
+      <div class="cta-divider-line"></div>
+      <div class="cta-col">
+        <div><h3>Support the <em>mission.</em></h3><p>Whether through funding, partnership, or volunteer expertise — there's a place for you in this work.</p></div>
+        <a href="#" class="btn-outline-cream" onclick="openPartnerModal();return false;" role="button">Get in Touch →</a>
+      </div>
+    </section>
+  </div><!-- /page-board -->
+
+  <!-- ══ MEDIA PAGE ══ -->
+  <div id="page-media" class="page-section">
+    <section class="media-page" style="padding-bottom: 120px;">
+      <div class="section-eyebrow reveal">Documenting the Journey</div>
+      <h2 class="section-heading reveal d1">Voices of <em>Impact.</em></h2>
+
+      <div class="media-coming-soon reveal d2">
+        <h3>Coming Soon</h3>
+        <p>Documentaries · Events · Lab Ledger</p>
+      </div>
+
+      <!-- Hidden format for preservation -->
+      <div style="display: none;">
+        <div class="featured-video-wrap">
+          <div class="featured-video">
+            <div class="board-monogram" style="font-size: 200px; opacity: 0.03;">MCFG</div>
+          </div>
+        </div>
+        <div class="media-grid">
+          <div class="media-card"><div class="media-title">Format Preserved</div></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ══ BASTET CASE STUDY PAGE ══ -->
+  <div id="page-bastet" class="page-section">
+    <section class="about-page">
+      
+      <div class="about-header reveal">
+        <span class="eyebrow">Case Study</span>
+        <h2>Bastet — Discreet DV Safety & <em>Resource Navigation Tool</em></h2>
+      </div>
+
+      <div class="about-content">
+        
+        <!-- Objective -->
+        <p class="reveal"><strong>What Was the Problem?</strong></p>
+        <p class="reveal d1">Domestic violence survivors in crisis need immediate access to shelter and support resources. Existing tools are either too complex to navigate under stress, require account creation, or leave identifiable traces on shared or monitored devices. The brief was clear: build something that works in seconds, leaves no trace, and feels nothing like a traditional help app.</p>
+
+        <div class="pull-quote reveal d2">
+          <p class="pull-quote-text">Victims experiencing domestic violence need a way to find safe shelters and support resources immediately, without exposing themselves to risk or navigating <em>complex existing systems.</em></p>
+        </div>
+
+        <p class="reveal"><strong>Design Principles Locked at Outset</strong></p>
+        <p class="reveal d1"><strong>Trust Is the Product</strong> — every decision evaluated against whether it builds or breaks user trust</p>
+        <p class="reveal d1"><strong>Privacy Is Table Stakes</strong> — no account, no history, no stored location, no trace</p>
+        <p class="reveal d1"><strong>Discretion Over Visibility</strong> — app icon designed to pass as a casual game</p>
+        <p class="reveal d1"><strong>Navigation Tool Only</strong> — no chat, no push notifications, no community features</p>
+
+        <div class="section-break reveal"></div>
+
+        <!-- Inspiration -->
+        <p class="reveal"><strong>Inspiration & Context</strong></p>
+        <p class="reveal d1">Bastet is named for the Egyptian goddess Bastet — protector of women, guardian of homes, and watchful presence. The name frames the app's core identity: quiet protection, not crisis branding.</p>
+        <p class="reveal d2">The app was designed to feel like nothing it actually is. On a home screen it reads as an indie game. Inside the app it reads as a composed, private tool. This tension between disguise and function informed every design and engineering decision made across four milestones.</p>
+
+        <div class="section-break reveal"></div>
+
+        <!-- What Makes It Different -->
+        <p class="reveal"><strong>What Makes It Different</strong></p>
+        <p class="reveal d1">• <strong>No account required</strong> — ever<br>
+        • <strong>Location used once</strong>, on-device only, never transmitted or stored<br>
+        • <strong>Quick Exit</strong> closes the app and clears it from recent apps in under 120ms<br>
+        • <strong>App icon</strong> designed as a pixel/16-bit Bastet mark — passes the glance test as a game<br>
+        • <strong>22 verified South Carolina shelters</strong> with callForAddress pattern for confidential locations</p>
+
+        <div class="section-break reveal"></div>
+
+        <!-- Process -->
+        <p class="reveal"><strong>Development Process</strong></p>
+        <p class="reveal d1">The project was structured across four milestones, each with a defined scope and completion criteria. Every milestone was closed before the next began — no features shipped without the safety baseline in place.</p>
+
+        <p class="reveal d2"><strong>Milestone 1 — Safety Baseline</strong></p>
+        <p class="reveal d2">The non-negotiables. Nothing ships without these.<br>
+        • Quick Exit — closes app, clears from recents, opens neutral destination (weather.com)<br>
+        • Privacy cover screen — activates on app background, no content flash on restore<br>
+        • Location permission flow — rationale shown, graceful denial handled<br>
+        • No account, no login, no stored identity</p>
+
+        <p class="reveal"><strong>Milestone 2 — Data Hardening</strong></p>
+        <p class="reveal d1">Real verified data. No test fixtures in production.<br>
+        • Schema v2.1 — 22 verified SC shelters, flat JSON, spec-compliant<br>
+        • callForAddress pattern — confidential shelters never show directions button<br>
+        • Runtime schema validator — invalid entries filtered on startup, logged in dev<br>
+        • Haversine distance formula — deterministic, no NaN or fallback edge cases<br>
+        • Graceful handling of GPS timeout, permission denied, services off</p>
+
+        <p class="reveal d2"><strong>Milestone 3 — UX Design System</strong></p>
+        <p class="reveal d2">Visual identity locked. Zero hardcoded values remaining.<br>
+        • Design tokens — theme.ts with colors, spacing, radius, shadows, typography<br>
+        • Playfair Display + DM Sans type pairing<br>
+        • Eggplant (#614051) as primary brand color throughout<br>
+        • Four UI directions explored with UI/UX specialist — current direction confirmed<br>
+        • Hero copy: "We believe you. Let us help you get the support you need. No judgement."</p>
+
+        <p class="reveal"><strong>Milestone 4 — Polish & Accessibility</strong></p>
+        <p class="reveal d1">Production-ready. Both platforms. All users.<br>
+        • WCAG AA audit — 5 issues found and resolved across all 4 screens<br>
+        • Onboarding flow — Privacy Promise + mandatory Quick Exit tutorial<br>
+        • Android MaterialIcons swap — SF Symbols have no Android fallback<br>
+        • Settings screen — replay onboarding, privacy statement, app version<br>
+        • SafeAreaView tested on API 36 and API 30 — passing</p>
+
+        <div class="section-break reveal"></div>
+
+        <!-- Results -->
+        <p class="reveal"><strong>Where Things Stand</strong></p>
+        <p class="reveal d1">Bastet is currently in Beta. All four development milestones are complete. The app is production-ready on iOS and Android pending App Store submission.</p>
+
+        <p class="reveal d2"><strong>Technical</strong><br>
+        • React Native / Expo — cross-platform iOS and Android<br>
+        • Zero third-party analytics, tracking SDKs, or advertising libraries<br>
+        • 22 verified SC shelter entries — schema-validated on every launch<br>
+        • WCAG AA compliant across all screens<br>
+        • Quick Exit tested across all screens and interaction states</p>
+
+        <p class="reveal"><strong>Product</strong><br>
+        • 4 design principles locked and reflected consistently across every screen<br>
+        • Onboarding flow educates users on privacy and Quick Exit without friction<br>
+        • callForAddress pattern protects confidential shelter locations while keeping them accessible<br>
+        • Beta test plan filed — Tier 1 advocate pipeline active (3 DV advocates, 2 familiar contacts)</p>
+
+        <p class="reveal d1"><strong>Status</strong><br>
+        • Development: Complete — Beta<br>
+        • Beta: Tier 1 advocate outreach in progress<br>
+        • App Store submission: Pending beta feedback and icon asset delivery<br>
+        • National expansion: Planned for v2.0+ via API layer (thehotline.org / 211.org)</p>
+
+        <div class="section-break reveal"></div>
+
+        <p class="reveal" style="text-align: center; margin-top: 40px;">
+          <a href="#" onclick="showPage('home'); return false;" class="btn-primary" style="display: inline-flex; text-decoration: none;">← Back to Projects</a>
+        </p>
+
+      </div>
+
+    </section>
+  </div><!-- /page-bastet -->
+
+  </main>
+
+  <footer>
+    <div class="footer-left">
+      <div class="footer-brand">Marble Ceilings For Good</div>
+      <div class="footer-sub">Berkeley County, South Carolina <span class="footer-gold-dot"></span> 501(c)(3) In Formation</div>
+    </div>
+    <div class="footer-right">
+      <div style="margin-bottom: 12px;">Bastet <span class="footer-gold-dot"></span> Project Prodigy <span class="footer-gold-dot"></span> Seshat</div>
+      <div style="margin-bottom: 8px;">&copy; 2026 Marble Ceilings For Good</div>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/profile.php?id=61589762973652" target="_blank" rel="noopener" title="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a href="https://www.instagram.com/mc_forgood" target="_blank" rel="noopener" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+        <a href="https://www.youtube.com/@MarbleCeilingsForGood" target="_blank" rel="noopener" title="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /site -->
+
+<script>
+/* ══════════════════════════════════════════
+   ROOT + LIGHT ANIMATION
+══════════════════════════════════════════ */
+const canvas = document.getElementById('root-canvas');
+const ctx = canvas.getContext('2d');
+
+// Skip intro if already seen in this session
+if (sessionStorage.getItem('mcfg_intro_seen')) {
+  const intro = document.getElementById('intro');
+  intro.style.display = 'none';
+  intro.classList.add('done');
+  document.getElementById('main-nav').classList.add('visible');
+  document.getElementById('site').classList.add('visible');
+  window.addEventListener('load', () => initReveal());
+}
+
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Branch system
+const branches = [];
+const W = () => canvas.width;
+const H = () => canvas.height;
+
+class Branch {
+  constructor(x, y, angle, length, depth, delay) {
+    this.x = x; this.y = y;
+    this.angle = angle;
+    this.maxLength = length;
+    this.depth = depth;
+    this.delay = delay; // ms before this branch starts growing
+    this.progress = 0;
+    this.growing = false;
+    this.done = false;
+    this.children = [];
+    this.childrenSpawned = false;
+    // Color: deeper roots = warmer brown, higher branches = gold-tinged
+    const t = 1 - (depth / 8);
+    const r = Math.round(60 + t * 100);
+    const g = Math.round(30 + t * 60);
+    const b = Math.round(20 + t * 20);
+    this.color = `rgba(${r},${g},${b},`;
+    this.width = Math.max(0.4, 2.5 - depth * 0.28);
+  }
+
+  start(t) {
+    if (!this.growing && t >= this.delay) this.growing = true;
+  }
+
+  update(dt) {
+    if (!this.growing || this.done) return;
+    this.progress += dt * (0.0012 + Math.random() * 0.0004);
+    if (this.progress >= 1) {
+      this.progress = 1;
+      this.done = true;
+    }
+    // Spawn children partway through
+    if (this.progress > 0.75 && !this.childrenSpawned && this.depth < 7) {
+      this.childrenSpawned = true;
+      const spread = 0.28 + Math.random() * 0.18;
+      const childLen = this.maxLength * (0.58 + Math.random() * 0.2);
+      const childDelay = this.delay + this.maxLength / 0.9;
+      if (Math.random() > 0.25) {
+        this.children.push(new Branch(0, 0, this.angle - spread, childLen, this.depth + 1, childDelay));
+      }
+      if (Math.random() > 0.2) {
+        this.children.push(new Branch(0, 0, this.angle + spread + (Math.random() * 0.15), childLen * 0.85, this.depth + 1, childDelay + 60));
+      }
+      if (this.depth < 3 && Math.random() > 0.5) {
+        this.children.push(new Branch(0, 0, this.angle - spread * 0.3, childLen * 0.7, this.depth + 1, childDelay + 30));
+      }
+    }
+  }
+
+  draw(t, parentX, parentY) {
+    if (!this.growing) return;
+    // Compute tip position
+    const len = this.maxLength * this.progress;
+    const tipX = parentX + Math.cos(this.angle) * len;
+    const tipY = parentY + Math.sin(this.angle) * len;
+
+    ctx.beginPath();
+    ctx.moveTo(parentX, parentY);
+    ctx.lineTo(tipX, tipY);
+    const alpha = Math.min(0.85, 0.3 + (1 - this.depth / 8) * 0.55);
+    ctx.strokeStyle = this.color + alpha + ')';
+    ctx.lineWidth = this.width;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Tiny dots at tips
+    if (this.done && this.depth > 4) {
+      ctx.beginPath();
+      ctx.arc(tipX, tipY, 0.8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(199,199,199,0.3)`;
+      ctx.fill();
+    }
+
+    // Draw children from tip
+    for (const child of this.children) {
+      child.start(t);
+      child.update(16);
+      child.draw(t, tipX, tipY);
+    }
+  }
+}
+
+// Seed roots from bottom center, slightly spread
+let startTime = null;
+let rootsSeeded = false;
+const roots = [];
+
+function seedRoots() {
+  const cx = W() * 0.5;
+  const base = H() + 10;
+  const angles = [
+    -Math.PI / 2,
+    -Math.PI / 2 - 0.22,
+    -Math.PI / 2 + 0.22,
+    -Math.PI / 2 - 0.5,
+    -Math.PI / 2 + 0.5,
+    -Math.PI / 2 - 0.08,
+    -Math.PI / 2 + 0.08,
+  ];
+  const lens = [280, 220, 240, 180, 170, 260, 250];
+  const delays = [0, 80, 80, 200, 200, 40, 40];
+
+  angles.forEach((a, i) => {
+    const r = new Branch(cx + (i - 3) * 28, base, a, lens[i], 0, delays[i]);
+    r.growing = false;
+    roots.push(r);
+  });
+}
+
+/* ── Leaf system ── */
+const allLeaves = [];
+let leavesSpawned = false;
+let leafSpawnTime = 0;
+
+class Leaf {
+  constructor(x, y, angle, spawnedAt) {
+    this.x = x + (Math.random() - 0.5) * 22;
+    this.y = y + (Math.random() - 0.5) * 22;
+    this.rot = angle - Math.PI / 2 + (Math.random() - 0.5) * 1.6;
+    this.w = 2.5 + Math.random() * 3.5;
+    this.h = 5 + Math.random() * 7;
+    this.maxScale = 0.8 + Math.random() * 0.6;
+    this.delay = Math.random() * 800;
+    this.spawnedAt = spawnedAt;
+    const warm = Math.random();
+    this.r = Math.round(185 + warm * 35);
+    this.g = Math.round(185 + warm * 35);
+    this.b = Math.round(185 + warm * 35);
+  }
+
+  draw(elapsed) {
+    const age = elapsed - this.spawnedAt - this.delay;
+    if (age <= 0) return;
+    const t = Math.min(1, age / 900);
+    const scale = (1 - Math.pow(1 - t, 3)) * this.maxScale;
+    const alpha = scale * 0.78;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.scale(scale, scale);
+    ctx.beginPath();
+    ctx.moveTo(0, -this.h);
+    ctx.bezierCurveTo( this.w, -this.h * 0.35,  this.w,  this.h * 0.35, 0,  this.h);
+    ctx.bezierCurveTo(-this.w,  this.h * 0.35, -this.w, -this.h * 0.35, 0, -this.h);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(${this.r},${this.g},${this.b},${alpha})`;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0, -this.h * 0.75);
+    ctx.lineTo(0,  this.h * 0.75);
+    ctx.strokeStyle = `rgba(${this.r - 18},${this.g - 18},${this.b},${alpha * 0.35})`;
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function collectTips(branch, px, py, tips) {
+  // Compute where THIS branch's tip actually is in screen space
+  const len = branch.maxLength * branch.progress;
+  const tx = px + Math.cos(branch.angle) * len;
+  const ty = py + Math.sin(branch.angle) * len;
+
+  if (branch.growing) {
+    if (branch.children.length === 0) {
+      // Terminal tip — always collect regardless of depth
+      tips.push({ x: tx, y: ty, angle: branch.angle });
+    } else if (branch.depth >= 3) {
+      // Mid-branch node deep enough — also collect as a leaf site
+      tips.push({ x: tx, y: ty, angle: branch.angle });
+    }
+  }
+
+  // Recurse — pass THIS tip as the parent origin for children
+  for (const child of branch.children) {
+    collectTips(child, tx, ty, tips);
+  }
+}
+
+function spawnLeaves(elapsed) {
+  const tips = [];
+  // Each root starts at its own (root.x, root.y) which is at the bottom edge
+  // Children accumulate positions upward from there
+  for (const root of roots) {
+    collectTips(root, root.x, root.y, tips);
+  }
+
+  // Filter to only tips that are actually on screen (above the bottom third)
+  const screenTips = tips.filter(t => t.y < H() * 0.75);
+  const source = screenTips.length > 0 ? screenTips : tips;
+
+  for (const tip of source) {
+    const count = 5 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < count; i++) {
+      allLeaves.push(new Leaf(tip.x, tip.y, tip.angle, elapsed));
+    }
+  }
+}
+
+/* Light shaft fade-in timeline */
+const LS1 = document.getElementById('ls1');
+const LS2 = document.getElementById('ls2');
+const LS3 = document.getElementById('ls3');
+const introText = document.getElementById('intro-text');
+
+function fadeEl(el, targetOpacity, durationMs, delayMs) {
+  setTimeout(() => {
+    el.style.transition = `opacity ${durationMs}ms ease`;
+    el.style.opacity = targetOpacity;
+  }, delayMs);
+}
+
+let animFrame;
+let elapsed = 0;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  elapsed = ts - startTime;
+
+  ctx.clearRect(0, 0, W(), H());
+
+  // Phase 1: Quote (0-5s)
+  const quoteEl = document.getElementById('intro-quote');
+  if (elapsed < 1000) {
+    quoteEl.style.opacity = Math.min(1, elapsed / 1000);
+  } else if (elapsed > 3000 && elapsed < 6000) {
+    quoteEl.style.opacity = Math.max(0, 1 - (elapsed - 3000) / 3000);
+  } else if (elapsed >= 6000) {
+    quoteEl.style.display = 'none';
+  } else if (elapsed >= 1000 && elapsed <= 3000) {
+    quoteEl.style.opacity = 1;
+  }
+
+  // Phase 2: Tree (Starts at 3.5s - overlap with quote fade)
+  const treeElapsed = elapsed - 3500;
+  if (treeElapsed >= 0) {
+    if (!rootsSeeded) { seedRoots(); rootsSeeded = true; }
+    for (const root of roots) {
+      root.start(treeElapsed);
+      root.update(16);
+      root.draw(treeElapsed, root.x, root.y);
+    }
+
+    // Light shafts appear at ~1.8s into tree phase (5300 total)
+    if (treeElapsed > 1800 && LS1.style.opacity === '') {
+      fadeEl(LS1, 1, 1400, 0);
+      fadeEl(LS2, 1, 1200, 300);
+      fadeEl(LS3, 1, 1000, 600);
+    }
+
+    // Leaves bloom at ~3.2s into tree phase (6700 total)
+    if (treeElapsed > 3200 && !leavesSpawned) {
+      leavesSpawned = true;
+      spawnLeaves(treeElapsed);
+    }
+    for (const leaf of allLeaves) {
+      leaf.draw(treeElapsed);
+    }
+
+    // Org name at ~3.5s into tree phase (7000 total)
+    if (treeElapsed > 3500 && introText.style.opacity === '') {
+      introText.style.transition = 'opacity 1.1s ease, transform 1.1s ease';
+      introText.style.opacity = 1;
+      introText.style.transform = 'translateY(0)';
+    }
+  }
+
+  // Exit at ~11s total
+  if (elapsed < 11000) {
+    animFrame = requestAnimationFrame(animate);
+  } else {
+    exitIntro();
+  }
+}
+
+function exitIntro() {
+  const intro = document.getElementById('intro');
+  intro.classList.add('exiting');
+  sessionStorage.setItem('mcfg_intro_seen', 'true'); // Save state
+  setTimeout(() => {
+    intro.classList.add('done');
+    intro.style.display = 'none';
+    document.getElementById('main-nav').classList.add('visible');
+    document.getElementById('site').classList.add('visible');
+    initReveal();
+  }, 1000);
+}
+
+// Kick off
+requestAnimationFrame(animate);
+
+/* ══════════════════════════════════════════
+   PAGE SWITCHING
+══════════════════════════════════════════ */
+function showPage(id, el) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  const targetPage = document.getElementById('page-' + id);
+  if (targetPage) targetPage.classList.add('active');
+
+  // Match nav link
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.remove('active');
+    const linkText = a.textContent.toLowerCase();
+    if (id === 'home' && linkText === 'our work') a.classList.add('active');
+    if (id === 'about' && linkText === 'about') a.classList.add('active');
+    if (id === 'board' && linkText === 'board') a.classList.add('active');
+    if (id === 'media' && linkText === 'media') a.classList.add('active');
+    if (id === 'bastet' && linkText === 'our work') a.classList.add('active');
+  });
+
+  if (typeof el === 'string' && el.startsWith('#')) {
+    setTimeout(() => {
+      const anchor = document.querySelector(el);
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 50);
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  initReveal();
+}
+
+function scrollToProjects() {
+  // Make sure we're on the home page first
+  showPage('home');
+  
+  // Then scroll to the projects section
+  setTimeout(() => {
+    const projectsSection = document.querySelector('.projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 100);
+}
+
+/* ══════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════ */
+function initReveal() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+}
+
+/* ══════════════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════════════ */
+const navToggle = document.getElementById('nav-toggle');
+const navLinks = document.getElementById('nav-links');
+const navOverlay = document.getElementById('nav-overlay');
+
+function toggleMobileMenu() {
+  if (window.innerWidth > 1024) return;
+  navToggle.classList.toggle('active');
+  navLinks.classList.toggle('active');
+  navOverlay.classList.toggle('active');
+  
+  const isActive = navToggle.classList.contains('active');
+  navToggle.setAttribute('aria-expanded', isActive);
+  
+  document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+}
+
+if (navToggle) {
+  navToggle.addEventListener('click', toggleMobileMenu);
+}
+
+// Skip animation on second visit
+document.addEventListener('keydown', e => {
+  // Don't interfere with input fields
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+    return;
+  }
+  
+  if (e.key === 'Escape' || e.key === ' ') {
+    if (document.getElementById('waitlist-modal').classList.contains('open')) {
+      closeWaitlist();
+    } else if (document.getElementById('partner-modal') && document.getElementById('partner-modal').classList.contains('open')) {
+      closePartnerModal();
+    } else {
+      if (animFrame) {
+        cancelAnimationFrame(animFrame);
+        animFrame = null;
+      }
+      exitIntro();
+    }
+  }
+});
+
+/* ══════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════ */
+let lastFocusedElement = null;
+
+function openWaitlist() {
+  lastFocusedElement = document.activeElement;
+  document.getElementById('waitlist-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // Focus first input
+  setTimeout(() => {
+    const firstInput = document.getElementById('wl-name');
+    if (firstInput) firstInput.focus();
+  }, 100);
+}
+function closeWaitlist() {
+  document.getElementById('waitlist-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  
+  // Return focus
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+    lastFocusedElement = null;
+  }
+}
+function submitWaitlist(e) {
+  e.preventDefault();
+  const name = document.getElementById('wl-name').value.trim();
+  const email = document.getElementById('wl-email').value.trim();
+  if (!name || !email) return;
+  document.getElementById('wl-form').style.display = 'none';
+  document.getElementById('wl-success').style.display = 'block';
+}
+
+function openPartnerModal() {
+  lastFocusedElement = document.activeElement;
+  document.getElementById('partner-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // Focus first input
+  setTimeout(() => {
+    const firstInput = document.getElementById('pt-name');
+    if (firstInput) firstInput.focus();
+  }, 100);
+}
+function closePartnerModal() {
+  document.getElementById('partner-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  
+  // Return focus
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+    lastFocusedElement = null;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var wlModal = document.getElementById('waitlist-modal');
+  if (wlModal) {
+    wlModal.addEventListener('click', function(e) {
+      if (e.target === this) closeWaitlist();
+    });
+  }
+  var ptModal = document.getElementById('partner-modal');
+  if (ptModal) {
+    ptModal.addEventListener('click', function(e) {
+      if (e.target === this) closePartnerModal();
+    });
+  }
+});
+
+/* Keyboard accessibility for role="button" */
+document.addEventListener('keydown', function(e) {
+  if (e.key === ' ' || e.code === 'Space') {
+    if (document.activeElement && document.activeElement.getAttribute('role') === 'button') {
+      e.preventDefault();
+      document.activeElement.click();
+    }
+  }
+});
+</script>
+
+<!-- WAITLIST MODAL -->
+<div class="modal-overlay" id="waitlist-modal" role="dialog" aria-modal="true" aria-labelledby="waitlist-title">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeWaitlist()" aria-label="Close">✕</button>
+    <div id="wl-form">
+      <div class="modal-eyebrow">Stay Connected</div>
+      <h2 class="modal-title" id="waitlist-title">Support is <em>coming.</em></h2>
+      <p class="modal-body">We're in the process of receiving our 501(c)(3) status. Join our waitlist to be the first to know when donations open — and to stay in the loop on our work in the meantime.</p>
+      <form class="modal-form" onsubmit="submitWaitlist(event)">
+        <label for="wl-name" class="sr-only">Your name</label>
+        <input class="modal-input" id="wl-name" type="text" placeholder="Your name" required autocomplete="name">
+        <label for="wl-email" class="sr-only">Your email address</label>
+        <input class="modal-input" id="wl-email" type="email" placeholder="Your email address" required autocomplete="email">
+        <button class="modal-submit" type="submit">Join the Waitlist →</button>
       </form>
+      <p class="modal-note">No spam. Just updates on our work and when giving opens.</p>
+    </div>
+    <div class="modal-success" id="wl-success">
+      <div class="modal-success-icon">🌿</div>
+      <h4>You're on the list.</h4>
+      <p>Thank you for believing in this work. We'll be in touch as soon as our 501(c)(3) status is confirmed and giving opens.</p>
     </div>
   </div>
+</div>
+
+<!-- PARTNER MODAL -->
+<div class="modal-overlay" id="partner-modal" role="dialog" aria-modal="true" aria-labelledby="partner-title">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closePartnerModal()" aria-label="Close">✕</button>
+    <div>
+      <div class="modal-eyebrow">Partner With Us</div>
+      <h2 class="modal-title" id="partner-title">Let's build <em>together.</em></h2>
+      <p class="modal-body">Send a message directly to our team. We're looking for funders, technologists, and community organizations who want to do things differently.</p>
+      <form class="modal-form" action="https://formspree.io/f/mojrggjl" method="POST">
+        <input type="hidden" name="_subject" value="New Partnership Inquiry - MCFG">
+        <input type="hidden" name="_honey" value="">
+        
+        <label for="pt-name" class="sr-only">Your name</label>
+        <input class="modal-input" id="pt-name" name="name" type="text" placeholder="Your name" required>
+        
+        <label for="pt-email" class="sr-only">Your email address</label>
+        <input class="modal-input" id="pt-email" name="email" type="email" placeholder="Your email address" required>
+        
+        <label for="pt-message" class="sr-only">Message</label>
+        <textarea class="modal-input" id="pt-message" name="message" placeholder="How would you like to partner?" required style="height: 100px; resize: vertical; font-family: inherit; font-size: inherit; margin-bottom:4px;"></textarea>
+        
+        <button class="modal-submit" type="submit">Send Message →</button>
+      </form>
+      <p class="modal-note">This form sends an inquiry securely to our team.</p>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
