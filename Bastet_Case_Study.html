@@ -150,6 +150,20 @@ body { color: var(--ink); font-family: var(--ff-body); line-height: 1.6; font-si
 .lc-close .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 28px; background: var(--plum-deep); color: var(--cream); font-family: var(--ff-ui); font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; }
 .lc-close .btn.ghost { background: transparent; color: var(--plum-deep); border: 1.5px solid var(--plum-deep); }
 
+/* Footer Styling */
+.study-footer {
+  background: var(--plum-deep); padding: 56px 72px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-top: 1px solid rgba(201,168,76,0.15);
+  color: var(--cream);
+  font-family: var(--ff-ui); font-size: 11px;
+}
+.study-footer .footer-left { display: flex; flex-direction: column; gap: 6px; }
+.study-footer .footer-brand { font-family: var(--ff-display); font-weight: 700; font-size: 20px; letter-spacing: 0.05em; color: var(--cream); }
+.study-footer .footer-sub { color: rgba(255,255,255,0.6); letter-spacing: 0.06em; }
+.study-footer .footer-right { color: rgba(255,255,255,0.6); text-align: right; line-height: 1.8; }
+.study-footer .footer-gold-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); vertical-align: middle; margin: 0 8px; opacity: 0.5; }
+
 @media (max-width: 900px) {
   .lc-hero { padding: 48px 28px; }
   .lc-hero h1 { font-size: 52px; }
@@ -167,6 +181,8 @@ body { color: var(--ink); font-family: var(--ff-body); line-height: 1.6; font-si
   .lc-diff .item { border-bottom: 1px solid var(--line); }
   .lc-status { grid-template-columns: 1fr; }
   .lc-close { grid-template-columns: 1fr; padding: 56px 28px; }
+  .study-footer { flex-direction: column; align-items: flex-start; gap: 40px; padding: 48px 28px; }
+  .study-footer .footer-right { text-align: left; }
 }
 
 /* NAVIGATION CONSISTENCY */
@@ -486,7 +502,7 @@ body { color: var(--ink); font-family: var(--ff-body); line-height: 1.6; font-si
       </ul></div>
       <div class="col"><h4>Product</h4><ul>
         <li><strong>4 design principles</strong> reflected on every screen</li>
-        <li>Onboarding educates on privacy + Quick Exit, friction-free</li>
+        <li>Onboarding educates on privacy + Quick Exit, friction-free (<a href="bastet-privacy.html" style="color: var(--accent-light); text-decoration: underline;">read statement</a>)</li>
         <li><strong>callForAddress</strong> protects confidential locations</li>
         <li>Beta plan filed — Tier 1 pipeline (3 advocates + 2 contacts)</li>
       </ul></div>
@@ -506,6 +522,16 @@ body { color: var(--ink); font-family: var(--ff-body); line-height: 1.6; font-si
       <a href="#" class="btn ghost">Support Us</a>
     </div>
   </section>
+
+  <footer class="study-footer">
+    <div class="footer-left">
+      <div class="footer-brand">Marble Ceilings For Good</div>
+      <div class="footer-sub">Berkeley County, South Carolina <span class="footer-gold-dot"></span> 501(c)(3)</div>
+    </div>
+    <div class="footer-right">
+      <div style="margin-bottom: 8px;">&copy; 2026 Marble Ceilings For Good <span class="footer-gold-dot"></span> <a href="bastet-privacy.html" style="color: rgba(255,255,255,0.6); text-decoration: none;">Bastet Privacy Statement</a></div>
+    </div>
+  </footer>
 </div>
 
 <script>
